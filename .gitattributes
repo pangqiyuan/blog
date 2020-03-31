@@ -1,0 +1,11 @@
+# *               text=auto
+# *.jpg       -text
+# *.vcproj    text eol=crlf
+# *.py        eol=lf
+*.java      eol=lf
+*.txt       eol=crlf
+*.sh        eol=lf
+*.bat       eol=crlf
+*.js linguist-language=Java
+*.css linguist-language=Java
+

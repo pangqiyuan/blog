@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="renderer" content="webkit" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="SmartWiki" />
+	<title>用户登录 - Powered by JavaDoc</title>
+
+	<link th:href="@{/css/style1.css}" rel="stylesheet">
+	<script th:src="@{/js/jquery-1.7.2.js}"></script>
+
+</head>
+<body>
+<div class="wrap">
+	<div class="banner-show" id="js_ban_content">
+		<div class="cell bns-01">
+			<div class="con">
+			</div>
+		</div>
+		<div class="cell bns-02" style="display:none;">
+			<div class="con">
+<!--				<a href="http://www.sucaihuo.com/" target="_blank" class="banner-link">-->
+				<i>圈子</i></a> </div>
+		</div>
+		<div class="cell bns-03" style="display:none;">
+			<div class="con">
+<!--				<a href="http://www.sucaihuo.com/" target="_blank" class="banner-link">-->
+				<i>企业云</i></a> </div>
+		</div>
+	</div>
+	<div class="banner-control" id="js_ban_button_box">
+		<a th:href="@{javascript:}" class="left">左</a>
+		<a th:href="@{javascript:}" class="right">右</a>
+	</div>
+<script type="text/javascript">
+;(function(){
+
+	var defaultInd = 0;
+	var list = $('#js_ban_content').children();
+	var count = 0;
+	var change = function(newInd, callback){
+		if(count) return;
+		count = 2;
+		$(list[defaultInd]).fadeOut(400, function(){
+			count--;
+			if(count <= 0){
+				if(start.timer) window.clearTimeout(start.timer);
+				callback && callback();
+			}
+		});
+		$(list[newInd]).fadeIn(400, function(){
+			defaultInd = newInd;
+			count--;
+			if(count <= 0){
+				if(start.timer) window.clearTimeout(start.timer);
+				callback && callback();
+			}
+		});
+	}
+	
+	var next = function(callback){
+		var newInd = defaultInd + 1;
+		if(newInd >= list.length){
+			newInd = 0;
+		}
+		change(newInd, callback);
+	}
+	
+	var start = function(){
+		if(start.timer) window.clearTimeout(start.timer);
+		start.timer = window.setTimeout(function(){
+			next(function(){
+				start();
+			});
+		}, 8000);
+	}
+	
+	start();
+	
+	$('#js_ban_button_box').on('click', 'a', function(){
+		var btn = $(this);
+		if(btn.hasClass('right')){
+			//next
+			next(function(){
+				start();
+			});
+		}
+		else{
+			//prev
+			var newInd = defaultInd - 1;
+			if(newInd < 0){
+				newInd = list.length - 1;
+			}
+			change(newInd, function(){
+				start();
+			});
+		}
+		return false;
+	});
+	
+})();
+</script>
+
+<script type="text/javascript">
+var FancyForm=function(){
+	return{
+		inputs:".reg-form input",
+		setup:function(){
+			var a=this;
+			this.inputs=$(this.inputs);
+			a.inputs.each(function(){
+				var c=$(this);
+				a.checkVal(c)
+			});
+			a.inputs.live("keyup blur",function(){
+				var c=$(this);
+				a.checkVal(c);
+			});
+		},checkVal:function(a){
+			a.val().length>0?a.parent("div").addClass("val"):a.parent("div").removeClass("val")
+		}
+	}
+}();
+</script>
+
+<!--	<div class="container">-->
+<!--		<div class="register-box">-->
+<!--			<div class="reg-slogan">-->
+<!--				新用户注册</div>-->
+<!--			<div class="reg-form" id="js-form-mobile">-->
+<!--				<br>-->
+<!--				<br>-->
+<!--				<div class="cell">-->
+<!--					<label for="js-mobile_ipt">填写手机号</label>-->
+<!--					<input type="text" name="mobile" id="js-mobile_ipt" class="text" maxlength="11" />-->
+<!--				</div>-->
+<!--				<div class="cell">-->
+<!--					<label for="js-mobile_pwd_ipt">设置密码</label>-->
+<!--					<input type="password" name="passwd" id="js-mobile_pwd_ipt" class="text" />-->
+<!--					<input type="text" name="passwd" id="js-mobile_pwd_ipt_txt" class="text" maxlength="20" style="display:none;" />-->
+<!--					<b class="icon-form ifm-view js-view-pwd" title="查看密码" style="display: none">-->
+<!--					查看密码</b> </div>-->
+<!--				&lt;!&ndash; !短信验证码 &ndash;&gt;-->
+<!--				<div class="cell vcode">-->
+<!--					<label for="js-mobile_vcode_ipt">输入验证码</label>-->
+<!--					<input type="text" name="code" id="js-mobile_vcode_ipt" class="text" maxlength="6" />-->
+<!--					<a href="javascript:;" id="js-get_mobile_vcode" class="button btn-disabled">-->
+<!--					免费获取验证码</a> </div>-->
+<!--				<div class="bottom">-->
+<!--					<a id="js-mobile_btn" href="javascript:;" class="button btn-green">-->
+<!--					立即注册</a></div>-->
+<!--			</div>-->
+<!--			<div class="reg-form" id="js-form-mail" style="display: none;">-->
+<!--				<div class="cell">-->
+<!--					<label for="js-mail_ipt">输入你的常用邮箱</label>-->
+<!--					<input type="text" name="email" id="js-mail_ipt" class="text" />-->
+<!--				</div>-->
+<!--				<div class="cell">-->
+<!--					<label for="js-mail_pwd_ipt">设置密码</label>-->
+<!--					<input type="password" name="passwd" id="js-mail_pwd_ipt" class="text" />-->
+<!--					<input type="text" name="passwd" id="js-mail_pwd_ipt_txt" class="text" maxlength="20" style="display:none;" />-->
+<!--					<b class="icon-form ifm-view js-view-pwd" title="查看密码" style="display: none">-->
+<!--					查看密码</b> </div>-->
+<!--				&lt;!&ndash; !短信验证码 &ndash;&gt;-->
+<!--				<div class="cell vcode">-->
+<!--					<label for="js-mail_vcode_ipt">输入验证码</label>-->
+<!--					<input type="text" name="code" id="js-mail_vcode_ipt" class="text" maxlength="4" />-->
+<!--					<img id="js-mail_vcode_img" src="http://passport.115.com/?ct=securimage&ac=email" alt="code" />-->
+<!--					<span>-->
+<!--					<a id="js-mail_vcode_a" href="javascript:;" code_src="http://passport.115.com/?ct=securimage&amp;ac=email">-->
+<!--					换一张</a></span> </div>-->
+<!--				<div class="user-agreement">-->
+<!--					<input type="checkbox" id="js-mail_chk" checked="true" />-->
+<!--					<label for="js-mail_chk">同意<a href="http://115.com/agreement.html" target="_blank">《115网盘用户服务协议》</a></label>-->
+<!--				</div>-->
+<!--				<div class="bottom">-->
+<!--					<a id="js-mail_btn" href="javascript:;" class="button btn-green">-->
+<!--					立即注册</a></div>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+</div>
+
+
+<style type="text/css">
+    .vad { margin: 120px 0 5px; font-family: Consolas,arial,宋体,sans-serif; text-align:center;}
+    .vad a { display: inline-block; height: 36px; line-height: 36px; margin: 0 5px; padding: 0 50px; font-size: 14px; text-align:center; color:#eee; text-decoration: none; background-color: #222;}
+    .vad a:hover { color: #fff; background-color: #000;}
+    .thead { width: 728px; height: 90px; margin: 0 auto; border-bottom: 40px solid #fff;}
+</style>
+
+</body>
+</html>

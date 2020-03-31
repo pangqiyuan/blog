@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: blog-documentation
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/blog?serverTimezone=GMT
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+    template:
+      cache: false
+    servlet:
+      content-type: text/html
+  mvc:
+    favicon:
+      enabled: false
+    static-path-pattern: /**
+  data:
+    mongodb:
+#      host: 192.168.31.56
+#      authentication-database: admin
+#      username: sylg-pqy
+#      password: 123456
+#      port: 27017
+#      database: sylg-blob
+      uri: mongodb://sylg-pqy:123456@192.168.31.56:27017/sylg-blob?authSource=admin&authMechanism=SCRAM-SHA-1
+  mail:
+    host: smtp.163.com
+    username: hwpqy9862@163.com
+    password: GMTOTWCDIPETRVWB
+    protocol: smtp
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+        debug: true
+    port: 465
+    from: hwpqy9862@163.com
+
+
+
+
+mybatis:
+  type-aliases-package: com.sylg.blog.service.documentation.domain
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    cache-enabled: true
+
+server:
+  port: 8081
+
+
+logging:
+  level:
+    com:
+      sylg:
+        blog:
+          service:
+            documentation:
+              mapper: debug
+
+

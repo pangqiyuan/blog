@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="SmartWiki" />
+    <title>用户登录 - Powered by JavaDoc</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/style1.css}" rel="stylesheet">
+    <script th:src="@{/js/jquery-1.7.2.js}"></script>
+    <script th:src="@{/jquery/1.12.4/jquery.min.js}"></script>
+</head>
+<body class="manual-container">
+<header class="navbar navbar-static-top smart-nav navbar-fixed-top manual-header" role="banner">
+        <div class="navbar-header col-sm-12 col-md-6 col-lg-5">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/index" title="首页" >首页</a>
+                </li>
+            </ul>
+        </div>
+</header>
+<div class="wrap">
+    <div class="banner-show" id="js_ban_content">
+        <div class="cell bns-01">
+            <div class="con">
+            </div>
+        </div>
+        <div class="cell bns-02" style="display:none;">
+            <div class="con">
+                <!--				<a href="http://www.sucaihuo.com/" target="_blank" class="banner-link">-->
+<!--                <i>圈子</i></a> -->
+            </div>
+        </div>
+        <div class="cell bns-03" style="display:none;">
+            <div class="con">
+                <!--				<a href="http://www.sucaihuo.com/" target="_blank" class="banner-link">-->
+<!--                <i>企业云</i></a> -->
+            </div>
+        </div>
+    </div>
+    <div class="banner-control" id="js_ban_button_box">
+        <a th:href="@{javascript:}" class="left">左</a>
+        <a th:href="@{javascript:}" class="right">右</a>
+    </div>
+<div class="container manual-body">
+    <div class="register-box">
+        <div class="login-body">
+            <form role="form" method="post" class="reg-form">
+                <h3 class="reg-slogan">用户登录</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <input type="text" class="form-control" placeholder="账号" name="loginCode" id="login_code" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-lock"></i>
+                        </div>
+                        <input type="password" class="form-control" placeholder="密码" name="password" id="password" autocomplete="off">
+                    </div>
+                </div>
+                <!--<div class="form-group" th:if="${ENABLED_CAPTCHA}=='true'">-->
+                    <!--<div class="input-group" style="float: left;width: 195px;">-->
+                        <!--<div class="input-group-addon">-->
+                            <!--<i class="fa fa-check-square"></i>-->
+                        <!--</div>-->
+                        <!--<input type="text" name="code" id="code" class="form-control" style="width: 150px" maxlength="5" placeholder="验证码" autocomplete="off">&nbsp;-->
+                    <!--</div>-->
+                    <!--<img id="captcha-img" style="width: 140px;height: 40px;display: inline-block;float: right"  onclick = "this.src='/defaultKaptcha?d='+new Date()*1" src="/defaultKaptcha" title="点击换一张">-->
+                    <!--<div class="clearfix"></div>-->
+                <!--</div>-->
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="is_remember" value="yes"> 保持登录
+                    </label>
+                    <a href="/blog/user/find_password" style="display: inline-block;float: right">忘记密码？</a>
+                </div>
+                <div class="form-group" >
+                    <button type="button" id="btn-login" class="btn btn-success" style="width: 100%"  data-loading-text="正在登录..." autocomplete="off">立即登录</button>
+                </div>
+                <div class="form-group" >
+                    还没有账号？<a href="/blog/user/register" title="立即注册">立即注册</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+</div>
+<div th:replace="/widgets/footer :: footer"></div>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/layer/layer.js}" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#login_code,#password").on('focus',function () {
+            $(this).tooltip('destroy').parents('.form-group').removeClass('has-error');;
+        });
+        $(document).keydown(function (e) {
+            var event = document.all ? window.event : e;
+            if(event.keyCode === 13){
+                $("#btn-login").click();
+            }
+        });
+        $("#btn-login").on('click',function () {
+            var $btn = $(this).button('loading');
+            var login_code = $.trim($("#login_code").val());
+            var password = $.trim($("#password").val());
+            var code = $("#code").val();
+            if(login_code === ""){
+                $("#login_code").tooltip({placement:"auto",title : "账号不能为空",trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+
+            }else if(password === ""){
+                $("#password").tooltip({title : '密码不能为空',trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+
+            }else if (login_code.length > 10){
+                $("#login_code").tooltip({placement:"auto",title : "账号长度不能超过10位",trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+            }
+            // else if(code !== undefined && code === ""){
+            //     $("#code").tooltip({title : '验证码不能为空',trigger : 'manual'})
+            //         .tooltip('show')
+            //         .parents('.form-group').addClass('has-error');
+            //     $btn.button('reset');
+            //     return false;
+            // }
+            else{
+                $.ajax({
+                    url : "login",
+                    data : $("form").serializeArray(),
+                    type : "POST",
+                    success : function (res) {
+                        if(res.code !== "success"){
+                            // $("#captcha-img").click();
+                            // $("#code").val('');
+                            layer.msg(res.msg);
+                            $btn.button('reset');
+                        }else{
+                            window.location = "/index";
+                        }
+                    },
+                    error :function () {
+                        // $("#captcha-img").click();
+                        // $("#code").val('');
+                        layer.msg('系统错误');
+                        $btn.button('reset');
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
+<script type="text/javascript">
+    ;(function(){
+
+        var defaultInd = 0;
+        var list = $('#js_ban_content').children();
+        var count = 0;
+        var change = function(newInd, callback){
+            if(count) return;
+            count = 2;
+            $(list[defaultInd]).fadeOut(400, function(){
+                count--;
+                if(count <= 0){
+                    if(start.timer) window.clearTimeout(start.timer);
+                    callback && callback();
+                }
+            });
+            $(list[newInd]).fadeIn(400, function(){
+                defaultInd = newInd;
+                count--;
+                if(count <= 0){
+                    if(start.timer) window.clearTimeout(start.timer);
+                    callback && callback();
+                }
+            });
+        }
+
+        var next = function(callback){
+            var newInd = defaultInd + 1;
+            if(newInd >= list.length){
+                newInd = 0;
+            }
+            change(newInd, callback);
+        }
+
+        var start = function(){
+            if(start.timer) window.clearTimeout(start.timer);
+            start.timer = window.setTimeout(function(){
+                next(function(){
+                    start();
+                });
+            }, 8000);
+        }
+
+        start();
+
+        $('#js_ban_button_box').on('click', 'a', function(){
+            var btn = $(this);
+            if(btn.hasClass('right')){
+                //next
+                next(function(){
+                    start();
+                });
+            }
+            else{
+                //prev
+                var newInd = defaultInd - 1;
+                if(newInd < 0){
+                    newInd = list.length - 1;
+                }
+                change(newInd, function(){
+                    start();
+                });
+            }
+            return false;
+        });
+
+    })();
+</script>
+
+<script type="text/javascript">
+    var FancyForm=function(){
+        return{
+            inputs:".reg-form input",
+            setup:function(){
+                var a=this;
+                this.inputs=$(this.inputs);
+                a.inputs.each(function(){
+                    var c=$(this);
+                    a.checkVal(c)
+                });
+                a.inputs.live("keyup blur",function(){
+                    var c=$(this);
+                    a.checkVal(c);
+                });
+            },checkVal:function(a){
+                a.val().length>0?a.parent("div").addClass("val"):a.parent("div").removeClass("val")
+            }
+        }
+    }();
+</script>
+</body>
+</html>
