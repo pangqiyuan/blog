@@ -38,17 +38,12 @@ public class BlogUserServiceImpl implements BlogUserService{
 
     @Override
     public int findByUserName(String userName){
-        int count = blogUserMapper.findByUserName(userName);
-        return count;
+        return blogUserMapper.findByUserName(userName);
     }
 
     @Override
     public BlogUser selectOneByLoginCode(String loginCode) {
-        BlogUser blogUser = blogUserMapper.selectOneByLoginCode(loginCode);
-        if(blogUser != null){
-            return blogUser;
-        }
-        return null;
+        return blogUserMapper.selectOneByLoginCode(loginCode);
     }
 
     @Override

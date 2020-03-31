@@ -1,13 +1,11 @@
 package com.sylg.blog.service.documentation.controller;
 
-import com.sylg.blog.service.documentation.cache.SessionCache;
 import com.sylg.blog.service.documentation.common.constants.Constans;
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
 import com.sylg.blog.service.documentation.common.utils.Result;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.domain.Documentation;
 import com.sylg.blog.service.documentation.service.DocumentationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
