@@ -1,17 +1,24 @@
 package com.sylg.blog.service.documentation.service.impl;
 
+import com.sylg.blog.service.documentation.common.dto.TemplateContext;
+import com.sylg.blog.service.documentation.common.utils.TemplateContextFactory;
+import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.service.MailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -21,12 +28,14 @@ import java.util.Date;
  * @create: 2020-03-27 21:23
  **/
 @Service
+@Slf4j
 public class MailServiceImpl implements MailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
-
+    @Resource
+    private TemplateContextFactory templateContextFactory;
 
     @Value("${spring.mail.from}")
     private String from;
@@ -51,6 +60,19 @@ public class MailServiceImpl implements MailService {
         message.setSubject(subject);
         message.setText(content);
         mailSender.send(message);
+    }
+
+    @Override
+    @Async("mailTaskExecutor")
+    public void sendAsyncHtmlMail(BlogUser blogUser,BlogUser blogUser1,String subject, HttpServletRequest request) {
+        TemplateContext templateContext = new TemplateContext();
+        templateContext.setUsername(blogUser1.getUserName());
+        String process = templateContextFactory.process(templateContext);
+        try {
+            sendHtmlMail(blogUser.getEmail(),subject,process);
+        } catch (MessagingException e) {
+            log.error("邮件发送失败原因",e);
+        }
     }
 
     @Override

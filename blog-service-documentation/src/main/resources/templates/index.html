@@ -47,7 +47,7 @@
 <!--        <a data-toggle="modal" data-target="#loginModal" class="login" rel="nofollow">Hi,请登录</a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a> </div>-->
 
         <a href="/blog/user/login" title="用户登录" class="login" rel="nofollow" th:if="${session.blogUser == null}">Hi,请登录</a>&nbsp;&nbsp;
-        <a title="用户名" class="login" rel="nofollow" th:unless="${session.blogUser == null}" th:text=" 'Hi,' + ${session.blogUser.getUserName()}"></a>&nbsp;&nbsp;
+        <a href="/setting" title="用户名" class="login" rel="nofollow" th:unless="${session.blogUser == null}" th:text=" 'Hi,' + ${session.blogUser.getUserName()}"></a>&nbsp;&nbsp;
         <a href="/blog/user/register" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="/blog/user/edit_password" rel="nofollow" th:if="${session.blogUser != null}">修改密码</a>&nbsp;<a href="/blog/user/logout" rel="nofollow" th:if="${session.blogUser != null}">退出登录</a> </div>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>

@@ -25,18 +25,23 @@ import java.util.Map;
 @Slf4j
 public class TemplateContextFactory {
 
-    private static final String PASSWORD_URL = "";
+    private static final String PASSWORD_URL = "http://localhost:8081/blog/user/email_password";
 
 
     @Autowired
-    TemplateEngine templateEngine;
+    private TemplateEngine templateEngine;
 
-    public static Context findPasswordContext(TemplateContext templateContext){
+    public String process(TemplateContext templateContext){
+        Context context = findPasswordContext(templateContext);
+        return templateEngine.process("mail.html", context);
+    }
+
+    private Context findPasswordContext(TemplateContext templateContext){
         templateContext.setUrl(PASSWORD_URL);
         return createContext(templateContext);
     }
 
-    private static Context createContext(TemplateContext templateContext){
+    private Context createContext(TemplateContext templateContext){
         Context context = new Context();
         Field[] declaredFields = templateContext.getClass().getDeclaredFields();
         for (Field declaredField : declaredFields) {

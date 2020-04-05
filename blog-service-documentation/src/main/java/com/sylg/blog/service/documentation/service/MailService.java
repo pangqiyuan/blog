@@ -1,6 +1,9 @@
 package com.sylg.blog.service.documentation.service;
 
+import com.sylg.blog.service.documentation.domain.BlogUser;
+
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 public interface MailService {
     /**
@@ -21,6 +24,8 @@ public interface MailService {
      * @throws MessagingException
      */
     void sendHtmlMail(String to, String subject, String content) throws MessagingException;
+
+    void sendAsyncHtmlMail(BlogUser blogUser, BlogUser blogUser1, String subject, HttpServletRequest request);
 
     void sendHtmlMail(String to, String subject, String content, String... cc);
 

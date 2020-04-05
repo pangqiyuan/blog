@@ -10,6 +10,6 @@ import lombok.Data;
  **/
 @Data
 public class TemplateContext {
-    private String usernmae;
+    private String username;
     private String url;
 }

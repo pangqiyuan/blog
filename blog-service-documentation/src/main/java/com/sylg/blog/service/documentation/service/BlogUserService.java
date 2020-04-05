@@ -2,6 +2,8 @@ package com.sylg.blog.service.documentation.service;
 
 import com.sylg.blog.service.documentation.domain.BlogUser;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author pangqiyuan
@@ -32,7 +34,7 @@ public interface BlogUserService{
     * @Author: 忆地球往事
     * @Date: 2020/3/29
     */
-    int findByUserName(String userName);
+    int findCountByUserName(String userName);
 
     /**
     * @Description: 根据账号查找用户
@@ -60,4 +62,7 @@ public interface BlogUserService{
     * @Date: 2020/3/29
     */
     BlogUser updatePasswordByLoginCode(BlogUser blogUser,String newPassword);
+
+
+    BlogUser updatePwdQuestionByLoginCode(HttpServletRequest request, BlogUser blogUser);
 }

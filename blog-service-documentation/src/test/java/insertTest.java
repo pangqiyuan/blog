@@ -5,6 +5,7 @@ import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.domain.Documentation;
 import com.sylg.blog.service.documentation.repository.DocRepository;
 import com.sylg.blog.service.documentation.service.BlogUserService;
+import com.sylg.blog.service.documentation.service.MailService;
 import org.apache.commons.lang3.concurrent.Computable;
 import org.apache.commons.lang3.concurrent.Memoizer;
 import org.junit.Test;
@@ -12,7 +13,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -24,6 +28,20 @@ public class insertTest {
 
     @Autowired
     private DocRepository docRepository;
+
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private TemplateContextFactory templateContextFactory;
+
+    @Test
+    public void testMailSend() throws MessagingException {
+        TemplateContext templateContext = new TemplateContext();
+        templateContext.setUsername("庞淇元");
+        String process = templateContextFactory.process(templateContext);
+        mailService.sendHtmlMail("hwpqy9862@163.com","测试邮件",process);
+    }
 
     @Test
     public void update(){

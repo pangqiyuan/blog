@@ -18,7 +18,7 @@ public interface BlogUserMapper extends MyMapper<BlogUser> {
 
     int insertOrUpdateSelective(BlogUser record);
 
-    int findByUserName(String username);
+    int findCountByUserName(String username);
 
     BlogUser selectOneByLoginCode(String loginCode);
 
@@ -26,4 +26,6 @@ public interface BlogUserMapper extends MyMapper<BlogUser> {
 
 
     int updatePasswordByLoginCode(BlogUser blogUser);
+
+    int updatePwdQuestionByLoginCode(BlogUser blogUser);
 }

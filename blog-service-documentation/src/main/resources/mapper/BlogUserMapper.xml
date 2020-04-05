@@ -60,7 +60,7 @@
     extend_d2, extend_d3, extend_d4
   </sql>
 
-  <select id="findByUserName" parameterType="string" resultType="int">
+  <select id="findCountByUserName" parameterType="string" resultType="int">
     select count(*) from blog_user where user_name = #{username,jdbcType=VARCHAR};
   </select>
   <select id="selectOneByLoginCode" parameterType="string" resultMap="BaseResultMap">
@@ -73,6 +73,9 @@
   </update>
   <update id="updatePasswordByLoginCode">
     update blog_user set PASSWORD = #{password,jdbcType=VARCHAR} where login_code = #{loginCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updatePwdQuestionByLoginCode">
+    update blog_user set pwd_question = #{pwdQuestion,jdbcType=VARCHAR},pwd_question_answer = #{pwdQuestionAnswer,jdbcType=VARCHAR},pwd_question_2 = #{pwdQuestion2,jdbcType=VARCHAR},pwd_question_answer_2 = #{pwdQuestionAnswer2,jdbcType=VARCHAR},pwd_question_3 = #{pwdQuestion3,jdbcType=VARCHAR} ,pwd_question_answer_3 = #{pwdQuestionAnswer3,jdbcType=VARCHAR} where login_code = #{loginCode,jdbcType=VARCHAR}
   </update>
   <insert id="insertOrUpdate" keyColumn="user_code" keyProperty="userCode" parameterType="com.sylg.blog.service.documentation.domain.BlogUser" useGeneratedKeys="true">
     <!--@mbg.generated generated on Mon Dec 09 13:55:28 CST 2019.-->
@@ -644,4 +647,5 @@
       </if>
     </trim>
   </insert>
+
 </mapper>
