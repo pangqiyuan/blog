@@ -1,4 +1,4 @@
-package com.sylg.blog.service.documentation.common.utils;
+package com.sylg.blog.service.documentation.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

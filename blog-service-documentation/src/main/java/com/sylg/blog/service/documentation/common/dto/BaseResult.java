@@ -1,6 +1,5 @@
 package com.sylg.blog.service.documentation.common.dto;
 
-import com.sylg.blog.service.documentation.common.utils.Result;
 import lombok.Data;
 
 import java.io.Serializable;

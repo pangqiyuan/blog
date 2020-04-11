@@ -68,6 +68,9 @@
     <include refid="Base_Column_List"/>
      from blog_user where login_code = #{loginCode,jdbcType=VARCHAR};
   </select>
+  <select id="selectPwdQuestionsByLoginCode" parameterType="string" resultMap="BaseResultMap">
+    select pwd_question_answer,pwd_question_answer_2,pwd_question_answer_3 from blog_user where login_code = #{loginCode,jdbcType=VARCHAR}
+  </select>
   <update id="updateEmailByLoginCode">
     update blog_user set email = #{email,jdbcType=VARCHAR} where login_code = #{loginCode,jdbcType=VARCHAR}
   </update>

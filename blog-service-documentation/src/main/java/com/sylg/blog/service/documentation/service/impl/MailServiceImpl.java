@@ -1,7 +1,7 @@
 package com.sylg.blog.service.documentation.service.impl;
 
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
-import com.sylg.blog.service.documentation.common.utils.TemplateContextFactory;
+import com.sylg.blog.service.documentation.Factory.TemplateContextFactory;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.service.MailService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -93,7 +91,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendAttachmentsMail(String to, String subject, String content, String filePath) throws MessagingException {
+    public void sendAttachmentsMail(String to, String subject, String content, String filePath){
 
     }
 
@@ -103,7 +101,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendResourceMail(String to, String subject, String content, String rscPath, String rscId) throws MessagingException {
+    public void sendResourceMail(String to, String subject, String content, String rscPath, String rscId) {
 
     }
 

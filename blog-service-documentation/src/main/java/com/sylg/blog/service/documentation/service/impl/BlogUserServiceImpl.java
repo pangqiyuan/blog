@@ -57,6 +57,12 @@ public class BlogUserServiceImpl implements BlogUserService{
     }
 
     @Override
+    public boolean ackPwdQuestions(BlogUser blogUser,String loginCode) {
+        BlogUser user = blogUserMapper.selectPwdQuestionsByLoginCode(loginCode);
+        return blogUser.equals(user);
+    }
+
+    @Override
     public BlogUser updatePwdQuestionByLoginCode(HttpServletRequest request, BlogUser blogUser) {
         BlogUser newBlogUser = null;
         BlogUser oldBlogUser = (BlogUser) request.getSession().getAttribute(Constans.CURRENT_USER);

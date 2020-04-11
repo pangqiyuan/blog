@@ -1,9 +1,9 @@
-package com.sylg.blog.service.documentation.common.utils;
+package com.sylg.blog.service.documentation.Factory;
 
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -11,9 +11,7 @@ import org.thymeleaf.context.Context;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  * @program: blog
@@ -25,7 +23,7 @@ import java.util.Map;
 @Slf4j
 public class TemplateContextFactory {
 
-    private static final String PASSWORD_URL = "http://localhost:8081/blog/user/email_password";
+    private static final String PASSWORD_URL = "http://localhost:8081/blog/user/pwdQuestion";
 
 
     @Autowired

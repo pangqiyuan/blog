@@ -1,13 +1,10 @@
 package com.sylg.blog.service.documentation.controller;
 
 
-import com.sun.xml.internal.bind.v2.TODO;
 import com.sylg.blog.service.documentation.common.constants.Constans;
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
-import com.sylg.blog.service.documentation.common.dto.TemplateContext;
-import com.sylg.blog.service.documentation.common.utils.TemplateContextFactory;
 import com.sylg.blog.service.documentation.domain.BlogUser;
-import com.sylg.blog.service.documentation.common.utils.Result;
+import com.sylg.blog.service.documentation.common.dto.Result;
 import com.sylg.blog.service.documentation.service.BlogUserService;
 import com.sylg.blog.service.documentation.service.MailService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -55,7 +51,7 @@ public class BlogUserController {
     /**
     * @Description: 用户登录
     * @Param: [blogUser, request]
-    * @return: com.sylg.blog.service.documentation.common.utils.Result
+    * @return: com.sylg.blog.service.documentation.common.dto.Result
     * @Author: 忆地球往事
     * @Date: 2020/3/29
     */
@@ -70,6 +66,7 @@ public class BlogUserController {
         else {
                 if(blogUser.getPassword().equals(blogUser1.getPassword())){
                     request.getSession().setAttribute(Constans.CURRENT_USER ,blogUser1);
+                    log.info("用户登录信息：{}",blogUser1);
                     result.setCode(BaseResult.SUCCESS);
                 }
                 else {
@@ -96,7 +93,7 @@ public class BlogUserController {
     /**
     * @Description: 用户注册
     * @Param: [blogUser]
-    * @return: com.sylg.blog.service.documentation.common.utils.Result
+    * @return: com.sylg.blog.service.documentation.common.dto.Result
     * @Author: 忆地球往事
     * @Date: 2020/3/29
     */
@@ -135,7 +132,7 @@ public class BlogUserController {
     /**
     * @Description: 通过邮件发送确认用户
     * @Param: [blogUser, request]
-    * @return: com.sylg.blog.service.documentation.common.utils.Result
+    * @return: com.sylg.blog.service.documentation.common.dto.Result
     * @Author: 忆地球往事
     * @Date: 2020/4/4
     */
@@ -161,6 +158,31 @@ public class BlogUserController {
     }
 
     /**
+    * @Description: 跳转到密保确认页面
+    * @Param: []
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/7
+    */
+    @GetMapping(value="/pwdQuestion")
+    public String pwdQuestion(ModelMap modelMap, HttpServletRequest request) {
+        String mailLoginCode = (String) request.getSession().getAttribute("mailLoginCode");
+        BlogUser blogUser = blogUserService.selectOneByLoginCode(mailLoginCode);
+        modelMap.addAttribute("blogUser",blogUser);
+        log.info("邮箱认证后，进行密保确认页面跳转");
+        return "setting/ackPwdQuestion";
+    }
+
+    @PostMapping(value="/pwdQuestion")
+    public @ResponseBody Result pwdQuestion(BlogUser blogUser, HttpServletRequest request) {
+        String mailLoginCode = (String) request.getSession().getAttribute("mailLoginCode");
+        boolean success = blogUserService.ackPwdQuestions(blogUser, mailLoginCode);
+        log.info("临时设置用户{}密保状态:{}" , blogUser.getLoginCode(),success);
+        request.getSession().setAttribute("pwdStatus",success);
+        return success ? BaseResult.success("密保验证成功") : BaseResult.error("密保验证失败");
+    }
+
+    /**
      * @Description: 跳转忘记密码修改密码界面
      * @Param: []
      * @return: java.lang.String
@@ -168,7 +190,11 @@ public class BlogUserController {
      * @Date: 2020/3/29
      */
     @GetMapping(value="/email_password")
-    public String emailPassword() {
+    public String emailPassword(HttpServletRequest request) {
+        Boolean pwdStatus = (Boolean) request.getSession().getAttribute("pwdStatus");
+        if (pwdStatus == null || !pwdStatus) {
+            return "setting/ackPwdQuestion";
+        }
         log.info("邮箱认证后，找回密码");
         return "setting/email_password";
     }
@@ -177,7 +203,7 @@ public class BlogUserController {
     /**
      * @Description: 用户修改密码
      * @Param: [newPassword = 新密码 , request]
-     * @return: com.sylg.blog.service.documentation.common.utils.Result
+     * @return: com.sylg.blog.service.documentation.common.dto.Result
      * @Author: 忆地球往事
      * @Date: 2020/3/29
      */
@@ -212,7 +238,7 @@ public class BlogUserController {
     /**
     * @Description: 用户修改密码
     * @Param: [password = 旧密码 , newPassword = 新密码 , request]
-    * @return: com.sylg.blog.service.documentation.common.utils.Result
+    * @return: com.sylg.blog.service.documentation.common.dto.Result
     * @Author: 忆地球往事
     * @Date: 2020/3/29
     */

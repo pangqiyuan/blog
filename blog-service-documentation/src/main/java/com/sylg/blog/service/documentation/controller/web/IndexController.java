@@ -1,13 +1,16 @@
-package com.sylg.blog.service.documentation.controller;
+package com.sylg.blog.service.documentation.controller.web;
 
 import com.sylg.blog.service.documentation.domain.Documentation;
 import com.sylg.blog.service.documentation.service.DocumentationService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 
@@ -24,10 +27,10 @@ public class IndexController {
     @Resource
     private DocumentationService documentationService;
 
-    @GetMapping(value = "/index")
-    public String index(ModelMap map, HttpServletRequest request)
+    @GetMapping(value = "/")
+    public String index(@PageableDefault(size = 8, sort = {"createTime"}, direction = Sort.Direction.DESC) Pageable pageable, ModelMap map)
     {
-        List<Documentation> documentations = documentationService.findAll();
+        List<Documentation> documentations = documentationService.findAll(pageable);
         map.addAttribute("bookList",documentations);
         return "index";
     }

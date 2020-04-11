@@ -37,7 +37,7 @@
                 <div class="box-body">
                     <div class="dashboard">
                         <form method="post"  action="/book/editDoc" id="editBookDialogForm">
-                            <input type="hidden" name="_id" id="_id" th:value="${book._id}">
+                            <input type="hidden" name="id" id="id" th:value="${book.id}">
                             <input type="hidden" name="username" id="username" th:value="${book.username}">
                             <input type="hidden" name="createTime" id="createTime" th:value="${book.createTime}">
                             <div class="list">
@@ -45,8 +45,16 @@
                                 <input type="text" class="form-control" placeholder="标题(不超过100字)" name="docName" id="bookName" th:value="${book.docName}">
                             </div>
                             <div class="list">
+                                <span class="title">文档描述:</span>
+                                <input type="text" class="form-control" placeholder="简要描述" name="description" id="description" th:value="${book.description}">
+                            </div>
+                            <div class="list">
+                                <span class="title">博客分类主标签:</span>
+                                <input type="text" class="form-control" placeholder="简要描述" name="mainTag" id="mainTag" th:value="${book.mainTag}">
+                            </div>
+                            <div class="list">
                                 <span class="title">文档内容：</span>
-                                <textarea name="content" id="description" class="form-control" placeholder="博客内容" style="height: 90px;" th:text="${book.content}"></textarea>
+                                <textarea name="content" id="content" class="form-control" placeholder="博客内容" style="height: 90px;" th:text="${book.content}"></textarea>
                             </div>
                             <div class="list">
                                 <div class="col-lg-6">

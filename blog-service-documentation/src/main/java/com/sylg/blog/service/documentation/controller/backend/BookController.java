@@ -1,8 +1,8 @@
-package com.sylg.blog.service.documentation.controller;
+package com.sylg.blog.service.documentation.controller.backend;
 
 import com.sylg.blog.service.documentation.common.constants.Constans;
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
-import com.sylg.blog.service.documentation.common.utils.Result;
+import com.sylg.blog.service.documentation.common.dto.Result;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.domain.Documentation;
 import com.sylg.blog.service.documentation.service.DocumentationService;
@@ -57,13 +57,12 @@ public class BookController {
         Documentation documentation = documentationService.findDocByDocName(docName,blogUser.getUserName());
         map.addAttribute("book",documentation);
         return "book/edit";
-
     }
 
     @PostMapping(value = "/editDoc")
     public @ResponseBody Result editDoc(Documentation documentation,HttpServletRequest request){
-        String id = request.getParameter("_id");
-        documentation.set_id(id);
+        String id = request.getParameter("id");
+        documentation.setId(id);
         Result result = new Result();
         documentationService.saveDocByDocName(documentation);
         result.setCode(BaseResult.SUCCESS);

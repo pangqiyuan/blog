@@ -2,17 +2,19 @@
         xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="container">
         <div class="navbar-header col-sm-12 col-md-7 col-lg-6">
-            <a href="/" class="navbar-brand" th:utext=${SITE_NAME}></a>
             <nav class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="/index" title="首页" >首页</a>
+                        <a href="/" title="首页" >首页</a>
                     </li>
                     <li>
-                        <a href="{{urlfor "LabelController.List" }}" title="标签">标签</a>
+                        <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="{{urlfor "LabelController.List" }}" title="标签">标签</a>
+                    </li>
+                    <li>
+                        <a th:if="${session.blogUser.getPwdQuestion()== null}" href="/setting/pwdQuestion" title="请先设置密保" style="color: red">请先设置密保，否则无法管理博客</a>
                     </li>
                 </ul>
-                <div class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
+                <div th:if="${session.blogUser.getPwdQuestion()!= null}" class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
                     <form class="form-inline" action="{{urlfor "SearchController.Index"}}" method="get">
                         <input class="form-control" name="keyword" type="search" style="width: 230px;" placeholder="请输入关键词..." value="">
                         <button class="search-btn">
@@ -58,17 +60,17 @@
                     </div>
                     <ul class="dropdown-menu user-info-dropdown" role="menu">
                         <li>
-                            <a href="/setting" title="个人中心"><i class="fa fa-user" aria-hidden="true"></i> 个人中心</a>
+                            <a href="/setting/" title="个人中心"><i class="fa fa-user" aria-hidden="true"></i> 个人中心</a>
                         </li>
                         <li>
-                            <a href="/book" title="我的项目"><i class="fa fa-book" aria-hidden="true"></i> 我的博客</a>
+                            <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="/book/" title="我的项目"><i class="fa fa-book" aria-hidden="true" ></i> 我的博客</a>
                         </li>
                          <!-- 管理员可见 判断role -->
                         <li>
-                            <a href="/manager" title="管理后台"><i class="fa fa-university" aria-hidden="true"></i> 管理后台</a>
+                            <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="/manager/" title="管理后台"><i class="fa fa-university" aria-hidden="true"></i> 管理后台</a>
                         </li>
                         <li>
-                            <a href="/logout" title="退出登录"><i class="fa fa-sign-out"></i> 退出登录</a>
+                            <a href="/blog/user/logout" title="退出登录"><i class="fa fa-sign-out"></i> 退出登录</a>
                         </li>
                     </ul>
                 </li>

@@ -65,4 +65,6 @@ public interface BlogUserService{
 
 
     BlogUser updatePwdQuestionByLoginCode(HttpServletRequest request, BlogUser blogUser);
+
+    boolean ackPwdQuestions(BlogUser blogUser,String loginCode);
 }

@@ -2,13 +2,13 @@ package com.sylg.blog.service.documentation.mapper;
 
 import com.sylg.blog.service.documentation.common.mapper.MyMapper;
 import com.sylg.blog.service.documentation.domain.BlogUser;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author pangqiyuan
  * @date 2019/3/29
- *
+ * <p>
  * 用户数据层
  */
 
@@ -28,4 +28,6 @@ public interface BlogUserMapper extends MyMapper<BlogUser> {
     int updatePasswordByLoginCode(BlogUser blogUser);
 
     int updatePwdQuestionByLoginCode(BlogUser blogUser);
+
+    BlogUser selectPwdQuestionsByLoginCode(String loginCode);
 }

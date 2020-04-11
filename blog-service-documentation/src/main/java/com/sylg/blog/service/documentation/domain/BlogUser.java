@@ -288,4 +288,6 @@ public class BlogUser {
      */
     @Column(name = "extend_d4")
     private Date extendD4;
+
+
 }

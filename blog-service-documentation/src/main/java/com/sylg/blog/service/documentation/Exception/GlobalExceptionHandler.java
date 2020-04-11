@@ -1,7 +1,7 @@
 package com.sylg.blog.service.documentation.Exception;
 
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
-import com.sylg.blog.service.documentation.common.utils.Result;
+import com.sylg.blog.service.documentation.common.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.validation.BindException;

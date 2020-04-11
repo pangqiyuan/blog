@@ -1,24 +1,24 @@
 import com.sylg.blog.service.documentation.ServiceDocumentationApplication;
+import com.sylg.blog.service.documentation.cache.ViewsCacheStore;
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
-import com.sylg.blog.service.documentation.common.utils.TemplateContextFactory;
+import com.sylg.blog.service.documentation.Factory.TemplateContextFactory;
+import com.sylg.blog.service.documentation.controller.web.BlogController;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.domain.Documentation;
+import com.sylg.blog.service.documentation.mapper.BlogUserMapper;
 import com.sylg.blog.service.documentation.repository.DocRepository;
 import com.sylg.blog.service.documentation.service.BlogUserService;
 import com.sylg.blog.service.documentation.service.MailService;
-import org.apache.commons.lang3.concurrent.Computable;
-import org.apache.commons.lang3.concurrent.Memoizer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ServiceDocumentationApplication.class)
@@ -34,6 +34,50 @@ public class insertTest {
 
     @Autowired
     private TemplateContextFactory templateContextFactory;
+
+    @Autowired
+    private BlogUserMapper blogUserMapper;
+
+    @Autowired
+    private ViewsCacheStore viewsCacheStore;
+
+    @Autowired
+    private BlogController blogController;
+
+    @Test
+    public void testAop(){
+        //blogController.dashboard("5e8d89bcd630012df022ead8");
+    }
+
+    @Test
+    public void testViewsCahceStore(){
+        viewsCacheStore.syncDataToDatabase("5e8d89bcd630012df022ead8",10);
+        Optional<Integer> integer = viewsCacheStore.get("5e8d89bcd630012df022ead8", true);
+
+    }
+
+    @Test
+    public void testLocalDataTime(){
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now);
+    }
+
+    @Test
+    public void testBlogSelect(){
+        Optional<Documentation> repository = docRepository.findById("5e8d89bcd630012df022ead");
+        System.out.println(repository.orElse(null));
+    }
+    @Test
+    public void testPwd(){
+        BlogUser blogUser = blogUserMapper.selectPwdQuestionsByLoginCode("1102552196");
+        BlogUser blogUser1 = new BlogUser();
+        blogUser1.setPwdQuestionAnswer("庞志强");
+        blogUser1.setPwdQuestionAnswer2("陈艳红");
+        blogUser1.setPwdQuestionAnswer3("庞淇元");
+        System.out.println(blogUser);
+        System.out.println(blogUser1);
+        System.out.println(blogUser.equals(blogUser1));
+    }
 
     @Test
     public void testMailSend() throws MessagingException {

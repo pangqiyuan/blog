@@ -1,6 +1,7 @@
 package com.sylg.blog.service.documentation.service;
 
 import com.sylg.blog.service.documentation.domain.Documentation;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface DocumentationService {
     void saveDocByDocName(Documentation documentation);
 
     void deleteDocByDocName(String docId);
+
+    List<Documentation> findAll(Pageable pageable);
+
+    Documentation findDocById(String id);
 }

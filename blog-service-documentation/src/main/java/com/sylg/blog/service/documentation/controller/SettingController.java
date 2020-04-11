@@ -1,12 +1,9 @@
 package com.sylg.blog.service.documentation.controller;
 
-import com.sylg.blog.service.documentation.common.constants.Constans;
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
-import com.sylg.blog.service.documentation.common.utils.Result;
+import com.sylg.blog.service.documentation.common.dto.Result;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.service.BlogUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,5 +46,7 @@ public class SettingController {
         }
         return BaseResult.error("密保问题设置失败，请重新设置");
     }
+
+
 
 }
