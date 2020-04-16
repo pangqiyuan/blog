@@ -5,8 +5,8 @@ import java.util.Map;
 
 /**
  * 常量
- * 创建者 小柒2012
- * 创建时间	2017年9月7日
+ * 创建者 忆地球往事
+ * 创建时间	2020年4月16日
  *
  */
 public class Constans {
