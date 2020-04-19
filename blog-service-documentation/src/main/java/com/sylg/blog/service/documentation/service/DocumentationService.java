@@ -22,4 +22,20 @@ public interface DocumentationService {
     List<Documentation> findAll(Pageable pageable);
 
     Documentation findDocById(String id);
+
+    List<Documentation> findDocByIds(List<String> ids);
+
+    Boolean saveCommentByDocId(String id , Documentation.CommentByBean commentByBean);
+
+    Boolean saveCommentByDocId(String id, Documentation.ReplyComment replyComment,String replyCid);
+
+    List<Documentation> findDocByScoreDesc(Integer limit);
+
+    List<Documentation> searchByKeyword(String keyword);
+
+    List<Documentation> findDocByRandom(Integer randomCount);
+
+    List<Documentation> findDocByCommentDesc(Integer limit);
+
+    List<Documentation> findDocByRecommend(Integer limit);
 }

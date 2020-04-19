@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>忆地球往事</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/nprogress.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.min.css}">
+<link rel="apple-touch-icon-precomposed" th:href="@{/images/icon/icon.png}">
+<link rel="shortcut icon" th:href="@{/images/icon/favicon.ico}">
+<script th:src="@{/js/jquery-2.1.4.min.js}"></script>
+<script th:src="@{/js/nprogress.js}"></script>
+<script th:src="@{/js/jquery.lazyload.min.js}"></script>
+<!--[if gte IE 9]>
+  <script src="../../static/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+  <script src="../../static/js/html5shiv.min.js" type="text/javascript"></script>
+  <script src="../../static/js/respond.min.js" type="text/javascript"></script>
+  <script src="../../static/js/selectivizr-min.js" type="text/javascript"></script>
+  <![endif]-->
+
+<!--[if lt IE 9]>
+  <script>window.location.href='upgrade-browser.html';</script>
+<![endif]-->
+</head>
+
+<body class="user-select">
+<div th:replace="/widgets/commonLogin :: commonHeader"></div>
+<section class="container">
+  <div class="content-wrap">
+    <div class="content">
+      <div class="jumbotron">
+        <h1>欢迎访问忆地球往事博客</h1>
+        <p>在这里可以看到前端技术，后端程序，网站内容管理系统等文章，还有我的程序人生！</p>
+      </div>
+      <div class="widget widget_search">
+        <form class="navbar-form" action="/search" method="get">
+          <div class="input-group" style="width: 100%">
+            <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off" style="width: 78%">
+            <span>
+            <button class="btn btn-default btn-search"  type="submit" style="width: 20%">搜索</button>
+            </span> </div>
+        </form>
+      </div>
+      <span style="margin-top: 35px;margin-bottom: 5px;color: #818488ee;">共搜索到<span style="color: red;" th:text="${searchByKeywordDoc.size()}"></span>条记录：</span>
+      <article class="excerpt-minic excerpt-minic-index" style="height: 500px;width: 100%;" th:if="${searchByKeywordDoc.size() == 0}">
+        <div style="text-align: center;margin-top: 200px;color: #818488ee;"><h4>未找到您要搜索的内容,换个关键词试试吧~~~~~</h4></div>
+        <div style="text-align: center;margin-top: 50px;"> <a href="/" class="btn btn-primary" draggable="false">返回首页</a></div>
+      </article>
+      <div th:if="${searchByKeywordDoc.size() != 0}" th:each="blog : ${searchByKeywordDoc}">
+        <article class="excerpt excerpt-1"><a class="focus" th:href="@{/blog/{id}(id=${blog.id})}" title=""><img class="thumb" data-original="images/excerpt.jpg" th:src="@{/images/excerpt.jpg}" alt=""></a>
+          <header><a class="cat" href="program" th:text="${blog.mainTag}"><i></i></a>
+            <h2><a th:href="@{/blog/{id}(id=${blog.id})}" title="" th:text="${blog.docName}"></a></h2>
+          </header>
+          <p class="meta">
+            <i class="glyphicon glyphicon-time"></i><time class="time" th:text="' '+ ${blog.createTime}"></time>
+            <i class="glyphicon glyphicon-eye-open"></i><span class="views" th:text="' 共' + ${blog.views}+ '人围观'"></span>  <i class="glyphicon glyphicon-comment"></i><a class="comment" href="../../static/article.html#comment" th:text="' '+${blog.commentSize} + '个不明物体'"></a><i class="fa fa-user"><span title="创建者" data-toggle="tooltip" data-placement="bottom" th:text="' '+ ${blog.username}"></span></i></p>
+          <p class="note" th:text="|${blog.description}......|"></p>
+        </article>
+      </div>
+      <nav class="pagination" style="display: none;">
+        <ul>
+          <li class="prev-page"></li>
+          <li class="active"><span>1</span></li>
+          <li><a href="?page=2">2</a></li>
+          <li class="next-page"><a href="?page=2">下一页</a></li>
+          <li><span>共 2 页</span></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <aside class="sidebar">
+    <div class="fixed">
+      <div class="widget widget-tabs">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab">网站公告</a></li>
+          <li role="presentation"><a href="#centre" aria-controls="centre" role="tab" data-toggle="tab">会员中心</a></li>
+          <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab">联系站长</a></li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane notice active" id="notice">
+            <ul>
+              <li th:each=" announcement :${announcements}">
+                <time th:text="${announcement.announcementTime.substring(0,10)}"></time>
+                <a href="" target="_blank" th:text="${announcement.announcementContent}"></a></li>
+            </ul>
+          </div>
+          <div role="tabpanel" class="tab-pane centre" id="centre">
+            <h4>需要登录才能进入会员中心</h4>
+            <p> <a href="/blog/user/login"  class="btn btn-primary">立即登录</a> <a href="/blog/user/register" class="btn btn-default">现在注册</a> </p>
+          </div>
+          <div role="tabpanel" class="tab-pane contact" id="contact">
+            <h2>Email:<br />
+              <a href="mailto:hwpqy9862@163.com" data-toggle="tooltip" data-placement="bottom" title="hwpqy9862@163.com">hwpqy9862@163.com</a></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="widget widget_sentence">
+      <h3>每日一句</h3>
+      <div class="widget-sentence-content">
+        <h4 id="showdate">&nbsp;</h4>
+        <p>Do not let what you cannot do interfere with what you can do.<br />
+          别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
+      </div>
+    </div>
+    <div class="widget-box widget1" id="tabcelan">
+      <ul class="widget-content tabcelan">
+        <li id="con_title" class="con_post_title">
+          <ul id="tab">
+            <li id="one1" data-type="1" class="tabhover">推荐</li>
+            <li id="one2" data-type="2" class="">热门</li>
+            <li id="one3" data-type="3" class="">热评</li>
+          </ul></li>
+        <li id="con_one" class="con_one_list">
+          <ul id="con_one_1" style="display: block;" >
+            <li th:each=" recommendArticle,rStat : ${docByRecommend}">
+              <span class="li-icon li-icon-1" th:if="${rStat.index < 3}" th:text = "${rStat.count}"></span>
+              <span class="li-icon li-icon-4" th:if="${rStat.index >= 3}" th:text = "${rStat.count}"></span>
+              <a th:href="@{/blog/{id}(id=${recommendArticle.id})}" target="_blank" th:title="${recommendArticle.docName}" draggable="false" th:text="${recommendArticle.docName}">
+              </a>
+            </li>
+          </ul>
+          <ul id="con_one_2" style="display: none;">
+            <li th:each=" popularArticle,pStat : ${popularArticles}">
+              <span class="li-icon li-icon-1" th:if="${pStat.index < 3}" th:text = "${pStat.count}"></span>
+              <span class="li-icon li-icon-4" th:if="${pStat.index >= 3}" th:text = "${pStat.count}"></span>
+              <a th:href="@{/blog/{id}(id=${popularArticle.id})}" target="_blank" th:title="${popularArticle.docName}" draggable="false" th:text="${popularArticle.docName}">
+              </a>
+            </li>
+          </ul>
+          <ul id="con_one_3" style="display: none;">
+            <li th:each=" hotArticle,hStat : ${hotArticles}">
+              <span class="li-icon li-icon-1" th:if="${hStat.index < 3}" th:text = "${hStat.count}"></span>
+              <span class="li-icon li-icon-4" th:if="${hStat.index >= 3}" th:text = "${hStat.count}"></span>
+              <a th:href="@{/blog/{id}(id=${hotArticle.id})}" target="_blank" th:title="${hotArticle.docName}" draggable="false" th:text="${hotArticle.docName}">
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="widget widget_hot">
+      <h3>随机文章</h3>
+      <ul>
+        <li th:each=" randomArticle : ${docByRandom}"><a th:href="@{/blog/{id}(id=${randomArticle.id})}"><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg" th:src="@{/images/excerpt.jpg}" alt=""></span><span class="text" th:text="${randomArticle.docName}"></span><i class="glyphicon glyphicon-time"></i><span class="muted" th:text="' '+ ${randomArticle.createTime.substring(0,10)}"></span><i class="glyphicon glyphicon-eye-open"></i> <span class="muted" th:text="' '+${randomArticle.views}"></span></a></li>
+      </ul>
+    </div>
+  </aside>
+  <script type="text/javascript">
+    window.onload = function(){
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth();
+      month++;
+      var day = date.getDate();
+      var week = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+      document.getElementById("showdate").firstChild.nodeValue=year+"年"+month+"月"+day+"日"+" "+week[date.getDay()];
+    };
+
+    $(document).ready(function(){
+      $("#tab li").mousemove(function(){
+        $("#tab li").removeClass('tabhover');
+        $(this).addClass('tabhover');
+        $("#con_one ul").hide();
+        var id = $(this).attr('data-type');
+        $("#con_one_"+id).show();
+      });
+    });
+  </script>
+</section>
+<div th:replace="/widgets/footer_web :: footer"></div>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.ias.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

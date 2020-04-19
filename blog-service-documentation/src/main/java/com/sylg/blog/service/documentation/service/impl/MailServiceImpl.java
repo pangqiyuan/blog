@@ -1,7 +1,7 @@
 package com.sylg.blog.service.documentation.service.impl;
 
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
-import com.sylg.blog.service.documentation.Factory.TemplateContextFactory;
+import com.sylg.blog.service.documentation.factory.TemplateContextFactory;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.service.MailService;
 import lombok.extern.slf4j.Slf4j;

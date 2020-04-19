@@ -1,7 +1,7 @@
 package com.sylg.blog.service.documentation.cache;
 
 
-import com.sylg.blog.service.documentation.Factory.ScheduledThreadFactory;
+import com.sylg.blog.service.documentation.factory.ScheduledThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.util.Assert;
@@ -145,6 +145,10 @@ public abstract class InMemoryCacheStore extends AbstractCacheStore<String, Inte
                 syncDataToDatabase(key,BlogViewsCache.get(key).getData());
                 log.debug("Sync Data :[{}] To Database", key);
             });
+            if(!BlogViewsCache.isEmpty()){
+                log.debug("Clear data after synchronization");
+                clear();
+            }
         }
     }
 }

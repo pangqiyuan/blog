@@ -1,4 +1,4 @@
-package com.sylg.blog.service.documentation.Factory;
+package com.sylg.blog.service.documentation.factory;
 
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
 import lombok.extern.slf4j.Slf4j;

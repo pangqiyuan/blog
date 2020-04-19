@@ -21,7 +21,7 @@
         <div class="navbar-header col-sm-12 col-md-6 col-lg-5">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/index" title="首页" >首页</a>
+                    <a href="/" title="首页" >首页</a>
                 </li>
             </ul>
         </div>
@@ -153,13 +153,20 @@
                     data : $("form").serializeArray(),
                     type : "POST",
                     success : function (res) {
+                       var referrer = document.referrer;
+                       var domain = document.location.protocol + '//' + location.host;
+                       var URN = referrer.substring(domain.length);
                         if(res.code !== "success"){
                             // $("#captcha-img").click();
                             // $("#code").val('');
                             layer.msg(res.msg);
                             $btn.button('reset');
                         }else{
-                            window.location = "/";
+                            if("/blog/user/register" === URN){
+                                window.location = "/";
+                            }else {
+                                window.location = URN;
+                            }
                         }
                     },
                     error :function () {

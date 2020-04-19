@@ -1,7 +1,7 @@
 package com.sylg.blog.service.documentation.cache.lock;
 
 import com.sylg.blog.service.documentation.cache.ViewsCacheStore;
-import lombok.NonNull;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.Assert;
 
@@ -47,7 +48,7 @@ public class CacheLockInterceptor {
 
     @After("execution(* com.sylg.blog.service.documentation.controller.web.BlogController.*(..)) && @annotation(CacheLock)")
     @Async("viewTaskExecutor")
-    public void after(JoinPoint joinPoint){
+    public void incrViews(JoinPoint joinPoint){
         // Get cache lock
         CacheLock cacheLock = get(joinPoint);
 
@@ -77,6 +78,8 @@ public class CacheLockInterceptor {
         }
 
     }
+
+
 
 
     //@Around("@annotation(CacheLock)")

@@ -1,0 +1,111 @@
+<div th:fragment="aside"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <aside class="sidebar">
+        <div class="fixed">
+            <div class="widget widget-tabs">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab">网站公告</a></li>
+                    <li role="presentation"><a href="#centre" aria-controls="centre" role="tab" data-toggle="tab">会员中心</a></li>
+                    <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab">联系站长</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane notice active" id="notice">
+                        <ul>
+                            <li th:each=" announcement :${announcements}">
+                                <time th:text="${announcement.announcementTime.substring(0,10)}"></time>
+                                <a href="" target="_blank" th:text="${announcement.announcementContent}"></a></li>
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane centre" id="centre">
+                        <h4>需要登录才能进入会员中心</h4>
+                        <p> <a href="/blog/user/login"  class="btn btn-primary">立即登录</a> <a href="/blog/user/register" class="btn btn-default">现在注册</a> </p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane contact" id="contact">
+                        <h2>Email:<br />
+                            <a href="mailto:hwpqy9862@163.com" data-toggle="tooltip" data-placement="bottom" title="hwpqy9862@163.com">hwpqy9862@163.com</a></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="widget widget_search">
+                <form class="navbar-form" action="/search" method="get">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
+                        <span class="input-group-btn">
+            <button class="btn btn-default btn-search" type="submit">搜索</button>
+            </span> </div>
+                </form>
+            </div>
+        </div>
+        <div class="widget widget_sentence">
+            <h3>每日一句</h3>
+            <div class="widget-sentence-content">
+                <h4 id="showdate">&nbsp;</h4>
+                <p>Do not let what you cannot do interfere with what you can do.<br />
+                    别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
+            </div>
+        </div>
+        <div class="widget-box widget1" id="tabcelan">
+            <ul class="widget-content tabcelan">
+                <li id="con_title" class="con_post_title">
+                    <ul id="tab">
+                        <li id="one1" data-type="1" class="tabhover">推荐</li>
+                        <li id="one2" data-type="2" class="">热门</li>
+                        <li id="one3" data-type="3" class="">热评</li>
+                    </ul></li>
+                <li id="con_one" class="con_one_list">
+                    <ul id="con_one_1" style="display: block;" >
+                        <li th:each=" recommendArticle,rStat : ${docByRecommend}">
+                            <span class="li-icon li-icon-1" th:if="${rStat.index < 3}" th:text = "${rStat.count}"></span>
+                            <span class="li-icon li-icon-4" th:if="${rStat.index >= 3}" th:text = "${rStat.count}"></span>
+                            <a th:href="@{/blog/{id}(id=${recommendArticle.id})}" target="_blank" th:title="${recommendArticle.docName}" draggable="false" th:text="${recommendArticle.docName}">
+                            </a>
+                        </li>
+                    </ul>
+                    <ul id="con_one_2" style="display: none;">
+                        <li th:each=" popularArticle,pStat : ${popularArticles}">
+                            <span class="li-icon li-icon-1" th:if="${pStat.index < 3}" th:text = "${pStat.count}"></span>
+                            <span class="li-icon li-icon-4" th:if="${pStat.index >= 3}" th:text = "${pStat.count}"></span>
+                            <a th:href="@{/blog/{id}(id=${popularArticle.id})}" target="_blank" th:title="${popularArticle.docName}" draggable="false" th:text="${popularArticle.docName}">
+                            </a>
+                        </li>
+                    </ul>
+                    <ul id="con_one_3" style="display: none;">
+                        <li th:each=" hotArticle,hStat : ${hotArticles}">
+                            <span class="li-icon li-icon-1" th:if="${hStat.index < 3}" th:text = "${hStat.count}"></span>
+                            <span class="li-icon li-icon-4" th:if="${hStat.index >= 3}" th:text = "${hStat.count}"></span>
+                            <a th:href="@{/blog/{id}(id=${hotArticle.id})}" target="_blank" th:title="${hotArticle.docName}" draggable="false" th:text="${hotArticle.docName}">
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="widget widget_hot">
+            <h3>随机文章</h3>
+            <ul>
+                <li th:each=" randomArticle : ${docByRandom}"><a th:href="@{/blog/{id}(id=${randomArticle.id})}"><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg" th:src="@{/images/excerpt.jpg}" alt=""></span><span class="text" th:text="${randomArticle.docName}"></span><i class="glyphicon glyphicon-time"></i><span class="muted" th:text="' '+ ${randomArticle.createTime.substring(0,10)}"></span><i class="glyphicon glyphicon-eye-open"></i> <span class="muted" th:text="' '+${randomArticle.views}"></span></a></li>
+            </ul>
+        </div>
+    </aside>
+    <script type="text/javascript">
+        window.onload = function(){
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            month++;
+            var day = date.getDate();
+            var week = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+            document.getElementById("showdate").firstChild.nodeValue=year+"年"+month+"月"+day+"日"+" "+week[date.getDay()];
+        };
+
+        $(document).ready(function(){
+            $("#tab li").mousemove(function(){
+                $("#tab li").removeClass('tabhover');
+                $(this).addClass('tabhover');
+                $("#con_one ul").hide();
+                var id = $(this).attr('data-type');
+                $("#con_one_"+id).show();
+            });
+        });
+    </script>
+</div>

@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import java.util.TimerTask;
 
 /**
  * @program: blog
@@ -31,11 +30,17 @@ public class ViewsCacheStore extends InMemoryCacheStore {
         mongoTemplate.updateFirst(query,update, Documentation.class);
     }
 
+    /**
+    * @Description: 从mongodb中获取指定id的数据
+    * @Param: [id]
+    * @return: java.lang.Integer
+    * @Author: 忆地球往事
+    * @Date: 2020/4/13
+    */
     public Integer getDataFromDatabase(String id){
-
         Documentation document = mongoTemplate.findById(id, Documentation.class);
-
         assert document != null;
+
         return document.getViews();
     }
 

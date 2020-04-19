@@ -159,58 +159,117 @@ $(window).scroll(function () {
 };*/
 
 /*自定义右键菜单*/
-(function () {
-    var oMenu = document.getElementById("rightClickMenu");
-    var aLi = oMenu.getElementsByTagName("li");
-	//加载后隐藏自定义右键菜单
-	//oMenu.style.display = "none";
-    //菜单鼠标移入/移出样式
-    for (i = 0; i < aLi.length; i++) {
-        //鼠标移入样式
-        aLi[i].onmouseover = function () {
-            $(this).addClass('rightClickMenuActive');
-			//this.className = "rightClickMenuActive";
-        };
-        //鼠标移出样式
-        aLi[i].onmouseout = function () {
-            $(this).removeClass('rightClickMenuActive');
-			//this.className = "";
-        };
-    }
-    //自定义菜单
-    document.oncontextmenu = function (event) {
-		$(oMenu).fadeOut(0);
-        var event = event || window.event;
-        var style = oMenu.style;
-        $(oMenu).fadeIn(300);
-		//style.display = "block";
-        style.top = event.clientY + "px";
-        style.left = event.clientX + "px";
-        return false;
-    };
-    //页面点击后自定义菜单消失
-    document.onclick = function () {
-        $(oMenu).fadeOut(100);
-		//oMenu.style.display = "none"
-    }
-})();
+// (function () {
+//     var oMenu = document.getElementById("rightClickMenu");
+//     var aLi = oMenu.getElementsByTagName("li");
+// 	//加载后隐藏自定义右键菜单
+// 	//oMenu.style.display = "none";
+//     //菜单鼠标移入/移出样式
+//     for (i = 0; i < aLi.length; i++) {
+//         //鼠标移入样式
+//         aLi[i].onmouseover = function () {
+//             $(this).addClass('rightClickMenuActive');
+// 			//this.className = "rightClickMenuActive";
+//         };
+//         //鼠标移出样式
+//         aLi[i].onmouseout = function () {
+//             $(this).removeClass('rightClickMenuActive');
+// 			//this.className = "";
+//         };
+//     }
+//     //自定义菜单
+//     document.oncontextmenu = function (event) {
+// 		$(oMenu).fadeOut(0);
+//         var event = event || window.event;
+//         var style = oMenu.style;
+//         $(oMenu).fadeIn(300);
+// 		//style.display = "block";
+//         style.top = event.clientY + "px";
+//         style.left = event.clientX + "px";
+//         return false;
+//     };
+//     //页面点击后自定义菜单消失
+//     document.onclick = function () {
+//         $(oMenu).fadeOut(100);
+// 		//oMenu.style.display = "none"
+//     }
+// })();
 
 /*禁止键盘操作*/
-document.onkeydown=function(event){
-	var e = event || window.event || arguments.callee.caller.arguments[0];
-	if((e.keyCode === 123) || (e.ctrlKey) || (e.ctrlKey) && (e.keyCode === 85)){
-		return false;
-	}
-}; 
+// document.onkeydown=function(event){
+// 	var e = event || window.event || arguments.callee.caller.arguments[0];
+// 	if((e.keyCode === 123) || (e.ctrlKey) || (e.ctrlKey) && (e.keyCode === 85)){
+// 		return false;
+// 	}
+// };
 
 /*文章评论*/
 $(function(){
+
+    $(document).on("click",".comment-cf",function(){
+        var that = $(this).parent().parent().parent();
+        var flg = $(this).parent().parent().parent().find('#respond').html();
+        var cid = $(this).parent().find('.cid').val();
+        var replyName = $(this).parent().find('.address').text();
+        $("#postcomments").find('#respond').remove();
+        if(flg == undefined){
+            that.append($(".comment_div").html());
+            that.find('#respond').find('.cid').val(cid);
+            that.find('#respond').find('.replyName').val(replyName);
+            that.find('#respond').find('.comment_name').focus();
+            $('.emotion').qqFace({
+                id : 'facebox',
+                assign:'comment-textarea',
+                path:'/images/arclist/'	//表情存放的路径
+            });
+        }else{
+            that.find('#respond').remove();
+        }
+
+    });
+
+    $(document).on("click",'.comment-submit1',function () {
+        var commentContent = $('.comment-textarea1');
+        var commentButton = $("#comment-submit1");
+        var promptBox = $("#comment-prompt1");
+        var promptText = $('.comment-prompt-text1');
+        promptBox.fadeIn(400);
+        if(commentContent.val() === ''){
+            promptText.text('请留下您的评论');
+            return false;
+        }
+        commentButton.attr('disabled',true);
+        commentButton.addClass('disabled');
+        promptText.text('正在提交...');
+        $.ajax({
+            type:"POST",
+            url:"replyComment",
+            //url:"/Article/comment/id/" + articleid,
+            data: $("#comment-form1").serializeArray(),
+            cache:false, //不缓存此页面
+            success:function(res){
+                if(res.code !== "success"){
+                    promptText.text('评论失败!');
+                }else {
+                    promptText.text('评论成功!');
+                    commentContent.val(null);
+                    $(".commentlist").fadeIn(300);
+                    /*$(".commentlist").append();*/
+                    commentButton.attr('disabled',false);
+                    commentButton.removeClass('disabled');
+                }
+            }
+        });
+        /*$(".commentlist").append(replace_em(commentContent.val()));*/
+        promptBox.fadeOut(100);
+        return false;
+    });
+
 	$("#comment-submit").click(function(){
 		var commentContent = $("#comment-textarea");
 		var commentButton = $("#comment-submit");
 		var promptBox = $('.comment-prompt');
 		var promptText = $('.comment-prompt-text');
-		var articleid = $('.articleid').val();
 		promptBox.fadeIn(400);
 		if(commentContent.val() === ''){
 			promptText.text('请留下您的评论');
@@ -221,24 +280,30 @@ $(function(){
 		promptText.text('正在提交...');
 		$.ajax({   
 			type:"POST",
-			url:"test.php?id=" + articleid,
-			//url:"/Article/comment/id/" + articleid,   
-			data:"commentContent=" + replace_em(commentContent.val()),   
+			url:"comment",
+			//url:"/Article/comment/id/" + articleid,
+			data: $("#comment-form").serializeArray(),
 			cache:false, //不缓存此页面  
-			success:function(data){
-				alert(data);
-				promptText.text('评论成功!');
-			    commentContent.val(null);
-				$(".commentlist").fadeIn(300);
-				/*$(".commentlist").append();*/
-				commentButton.attr('disabled',false);
-				commentButton.removeClass('disabled');
+			success:function(res){
+			if(res.code !== "success"){
+                promptText.text('评论失败!');
+            }else {
+                promptText.text('评论成功!');
+                commentContent.val(null);
+                $(".commentlist").fadeIn(300);
+                /*$(".commentlist").append();*/
+                commentButton.attr('disabled',false);
+                commentButton.removeClass('disabled');
+            }
 			}
 		});
 		/*$(".commentlist").append(replace_em(commentContent.val()));*/
 		promptBox.fadeOut(100);
 		return false;
 	});
+
+
+
 });
 //对文章内容进行替换
 function replace_em(str){

@@ -1,4 +1,4 @@
-package com.sylg.blog.service.documentation.Factory;
+package com.sylg.blog.service.documentation.factory;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

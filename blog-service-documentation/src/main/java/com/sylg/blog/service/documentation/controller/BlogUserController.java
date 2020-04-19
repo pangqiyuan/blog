@@ -268,6 +268,6 @@ public class BlogUserController {
     @GetMapping(value="/logout")
     public String logout(HttpServletRequest request){
         request.getSession().setAttribute(Constans.CURRENT_USER, null);
-        return "redirect:/index";
+        return "redirect:/";
     }
 }

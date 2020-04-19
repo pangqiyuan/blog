@@ -1,30 +1,52 @@
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.sylg.blog.service.documentation.ServiceDocumentationApplication;
 import com.sylg.blog.service.documentation.cache.ViewsCacheStore;
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
-import com.sylg.blog.service.documentation.Factory.TemplateContextFactory;
+import com.sylg.blog.service.documentation.common.utils.BlogUtils;
+import com.sylg.blog.service.documentation.domain.Tag;
+import com.sylg.blog.service.documentation.factory.TemplateContextFactory;
 import com.sylg.blog.service.documentation.controller.web.BlogController;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.domain.Documentation;
+import com.sylg.blog.service.documentation.mapper.AnnouncementMapper;
 import com.sylg.blog.service.documentation.mapper.BlogUserMapper;
 import com.sylg.blog.service.documentation.repository.DocRepository;
 import com.sylg.blog.service.documentation.service.BlogUserService;
 import com.sylg.blog.service.documentation.service.MailService;
+import com.sylg.blog.service.documentation.service.TagService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.MessagingException;
+import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ServiceDocumentationApplication.class)
 public class insertTest {
     @Autowired
     private BlogUserService blogUserService;
+
+    @Autowired
+    private TagService tagService;
 
     @Autowired
     private DocRepository docRepository;
@@ -44,9 +66,124 @@ public class insertTest {
     @Autowired
     private BlogController blogController;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private AnnouncementMapper announcementMapper;
+
+    @Test
+    public void testTagService(){
+        //System.out.println(tagService.findBlogIdByMainTag("JAVA后端"));
+        //tagService.updateBlogId("5e9bfd23d6300156644423dd","5e8d89bcd630012df022ead8");
+        //Tag tag = new Tag();
+        //tag.setName("JAVA后端");
+        //tag.setBlogNumber(1);
+        //tagService.insertTag(tag);
+    }
+
+    @Test
+    public void testAnnouncementMapper(){
+        System.out.println(announcementMapper.selectAllByAnnouncementTimeDesc(5));
+
+    }
+    @Test
+    public void testDesc(){
+        List<String> list = Arrays.asList("5e8d89bcd630012df022ead8", "5e98815677e85e000634861f");
+        List<Documentation> documentations = (List<Documentation>) docRepository.findAllById(list);
+        System.out.println(documentations);
+
+        //AggregationOperation aggregationOperation = new CountOperation("commentByBeans");
+        //SortByCountOperation sortByCountOperation = new SortByCountOperation(aggregationOperation);
+        //TypedAggregation<Documentation> typedAggr = Aggregation.newAggregation(Documentation.class,
+        //        Aggregation.project("commentByBeans"),
+        //        Aggregation.unwind("commentByBeans"),
+        //        Aggregation.sort(Sort.Direction.DESC,"commentByBeans.commentTime"));
+        //AggregationResults<Documentation> aggregate = mongoTemplate.aggregate(typedAggr, Documentation.class);
+        //System.out.println(aggregate.getMappedResults());
+        //Pattern pattern = BlogUtils.getPattern("y");
+        //Sort sort = new Sort(Sort.Direction.DESC, "score");
+        //Query query = new Query(Criteria.where("docName").regex(pattern));
+        //List<Documentation> documentations = mongoTemplate.find(query.with(sort), Documentation.class);
+        //System.out.println(documentations);
+        //System.out.println(LocalDateTime.parse("2020-04-08 04:22:20", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));\
+      //  0.05006637082872328
+      //  0.04270848328864561
+      //  0.006558134586831564
+      //  0.005965557410348954
+      //  0.031283999004469605
+      //  0.722822346724572
+      //  0.03918039233483045
+      //  0.006127055049208141
+      //  0.13832661952659725
+      //3  System.out.println(BlogUtils.blogScore(140, "2020-04-15 04:22:20"));
+      //4  System.out.println(BlogUtils.blogScore(121, "2020-04-15 04:22:20"));
+      // 8 System.out.println(BlogUtils.blogScore(172, "2020-04-01 04:22:20"));
+      // 9 System.out.println(BlogUtils.blogScore(120, "2020-04-05 04:22:20"));
+      // 6 System.out.println(BlogUtils.blogScore(1500, "2020-03-16 04:22:20"));
+      //1  System.out.println(BlogUtils.blogScore(701, "2020-04-16 04:22:20"));
+      //5  System.out.println(BlogUtils.blogScore(413, "2020-04-10 04:22:20"));
+      // 7 System.out.println(BlogUtils.blogScore(228, "2020-03-25 04:22:20"));
+      // System.out.println(BlogUtils.blogScore(0, "2020-04-16 04:22:20"));
+        //List<Documentation> documentations = docRepository.findDocumentationsOrderByViewsDesc();
+        //System.out.println(documentations);
+        //System.out.println(docRepository.findAll());
+        //Sort sort = new Sort(Sort.Direction.DESC, "views").and(new Sort(Sort.Direction.DESC, "createTime"));
+        //Query query = new Query();
+        //System.out.println(mongoTemplate.find(query.with(sort), Documentation.class));
+
+        //Sort sort = new Sort(Sort.Direction.DESC, "score");
+        //Query query = new Query();
+        //System.out.println(mongoTemplate.find(query.with(sort).limit(2), Documentation.class));
+
+    }
+
     @Test
     public void testAop(){
+        Query query = new Query(Criteria.where("_id").is("5e8d89bcd630012df022ead8").and("commentByBeans.cid").is("1"));
+        Update update = new Update();
+        Documentation.CommentByBean commentByBean = new Documentation.CommentByBean();
+        //Documentation.CommentByBean commentByBean1 = new Documentation.CommentByBean();
+        //commentByBean1.setCid("2");
+        commentByBean.setCid("3");
+        //commentByBean.setReplyComment(Collections.singletonList(commentByBean1));
+        update.addToSet("commentByBeans.$.replyComment",commentByBean);
+        mongoTemplate.upsert(query, update, Documentation.class);
+//        DBObject obj = new BasicDBObject();
+//
+//        obj.put("_id", "5e8d89bcd630012df022ead8");
+//        obj.put("commentByBeans.cid","454b8d87e3cb4d9986b3703f1f760190");
+//
+//        BasicDBObject fieldsObject = new BasicDBObject();
+//
+//        fieldsObject.put("commentByBeans.", true);
+//
+//
+//        Query query = new BasicQuery( obj.toString(), fieldsObject.toString());
+//// 注意这里泛型的选择
+//        List<Documentation> documentations = mongoTemplate.find(query, Documentation.class);
+//        Optional<List<String>> list = documentations.stream().map(documentation -> documentation.getCommentByBeans().stream().map(Documentation.CommentByBean::getCid).collect(Collectors.toList())).findAny();
+//        if (list.isPresent()) {
+//            List<String> strings = list.get();
+//            System.out.println(strings);
+//        }
+        //de4cd3dfd7b24d3785091deb97a17124
+        //String s = BlogUtils.randomUUIDWithoutDash();
+        //System.out.println(s);
+        //System.out.println(UUID.randomUUID().toString());
         //blogController.dashboard("5e8d89bcd630012df022ead8");
+        //List<Documentation> documentations = mongoTemplate.findAll(Documentation.class);
+        //System.out.println(documentations);
+        //Tag tag = new Tag();
+        //tag.setName("java");
+        //Tag tag1 = new Tag();
+        //tag1.setName("基础");
+        //Documentation.CommentByBean commentByBean = new Documentation.CommentByBean("pang", "aaa", "bbb");
+        ////List<Tag> list = Arrays.asList(tag, tag1);
+        //Query query = new Query(Criteria.where("_id").is("5e8d89bcd630012df022ead8"));
+        //Update update = new Update();
+        //update.addToSet("commentByBeans",commentByBean);
+        //mongoTemplate.upsert(query, update, Documentation.class);
     }
 
     @Test

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sylg.blog.service.documentation.mapper.AnnouncementMapper">
+  <resultMap id="BaseResultMap" type="com.sylg.blog.service.documentation.domain.Announcement">
+    <!--@mbg.generated generated on Fri Apr 17 12:42:58 CST 2020.-->
+    <!--@Table announcement-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
+    <result column="announcement_time" jdbcType="TIMESTAMP" property="announcementTime" />
+    <result column="extend_s1" jdbcType="VARCHAR" property="extendS1" />
+    <result column="extend_s2" jdbcType="VARCHAR" property="extendS2" />
+    <result column="extend_s3" jdbcType="VARCHAR" property="extendS3" />
+    <result column="extend_i1" jdbcType="DECIMAL" property="extendI1" />
+    <result column="extend_i2" jdbcType="DECIMAL" property="extendI2" />
+    <result column="extend_f1" jdbcType="DECIMAL" property="extendF1" />
+    <result column="extend_f2" jdbcType="DECIMAL" property="extendF2" />
+    <result column="extend_d1" jdbcType="TIMESTAMP" property="extendD1" />
+    <result column="extend_d2" jdbcType="TIMESTAMP" property="extendD2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated generated on Fri Apr 17 12:42:58 CST 2020.-->
+    id, announcement_content, announcement_time, extend_s1, extend_s2, extend_s3, extend_i1, 
+    extend_i2, extend_f1, extend_f2, extend_d1, extend_d2
+  </sql>
+  <select id="selectAllByAnnouncementTimeDesc"  parameterType="integer" resultMap="BaseResultMap">
+    select
+    id, announcement_content, announcement_time
+    from announcement order by announcement_time desc limit #{limit};
+  </select>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.sylg.blog.service.documentation.domain.Announcement" useGeneratedKeys="true">
+    <!--@mbg.generated generated on Fri Apr 17 12:42:58 CST 2020.-->
+    insert into announcement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      announcement_content,
+      announcement_time,
+      extend_s1,
+      extend_s2,
+      extend_s3,
+      extend_i1,
+      extend_i2,
+      extend_f1,
+      extend_f2,
+      extend_d1,
+      extend_d2,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      #{announcementContent,jdbcType=VARCHAR},
+      #{announcementTime,jdbcType=TIMESTAMP},
+      #{extendS1,jdbcType=VARCHAR},
+      #{extendS2,jdbcType=VARCHAR},
+      #{extendS3,jdbcType=VARCHAR},
+      #{extendI1,jdbcType=DECIMAL},
+      #{extendI2,jdbcType=DECIMAL},
+      #{extendF1,jdbcType=DECIMAL},
+      #{extendF2,jdbcType=DECIMAL},
+      #{extendD1,jdbcType=TIMESTAMP},
+      #{extendD2,jdbcType=TIMESTAMP},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      announcement_time = #{announcementTime,jdbcType=TIMESTAMP},
+      extend_s1 = #{extendS1,jdbcType=VARCHAR},
+      extend_s2 = #{extendS2,jdbcType=VARCHAR},
+      extend_s3 = #{extendS3,jdbcType=VARCHAR},
+      extend_i1 = #{extendI1,jdbcType=DECIMAL},
+      extend_i2 = #{extendI2,jdbcType=DECIMAL},
+      extend_f1 = #{extendF1,jdbcType=DECIMAL},
+      extend_f2 = #{extendF2,jdbcType=DECIMAL},
+      extend_d1 = #{extendD1,jdbcType=TIMESTAMP},
+      extend_d2 = #{extendD2,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.sylg.blog.service.documentation.domain.Announcement" useGeneratedKeys="true">
+    <!--@mbg.generated generated on Fri Apr 17 12:42:58 CST 2020.-->
+    insert into announcement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="announcementContent != null">
+        announcement_content,
+      </if>
+      <if test="announcementTime != null">
+        announcement_time,
+      </if>
+      <if test="extendS1 != null">
+        extend_s1,
+      </if>
+      <if test="extendS2 != null">
+        extend_s2,
+      </if>
+      <if test="extendS3 != null">
+        extend_s3,
+      </if>
+      <if test="extendI1 != null">
+        extend_i1,
+      </if>
+      <if test="extendI2 != null">
+        extend_i2,
+      </if>
+      <if test="extendF1 != null">
+        extend_f1,
+      </if>
+      <if test="extendF2 != null">
+        extend_f2,
+      </if>
+      <if test="extendD1 != null">
+        extend_d1,
+      </if>
+      <if test="extendD2 != null">
+        extend_d2,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="announcementContent != null">
+        #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementTime != null">
+        #{announcementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="extendS1 != null">
+        #{extendS1,jdbcType=VARCHAR},
+      </if>
+      <if test="extendS2 != null">
+        #{extendS2,jdbcType=VARCHAR},
+      </if>
+      <if test="extendS3 != null">
+        #{extendS3,jdbcType=VARCHAR},
+      </if>
+      <if test="extendI1 != null">
+        #{extendI1,jdbcType=DECIMAL},
+      </if>
+      <if test="extendI2 != null">
+        #{extendI2,jdbcType=DECIMAL},
+      </if>
+      <if test="extendF1 != null">
+        #{extendF1,jdbcType=DECIMAL},
+      </if>
+      <if test="extendF2 != null">
+        #{extendF2,jdbcType=DECIMAL},
+      </if>
+      <if test="extendD1 != null">
+        #{extendD1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="extendD2 != null">
+        #{extendD2,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="announcementContent != null">
+        announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementTime != null">
+        announcement_time = #{announcementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="extendS1 != null">
+        extend_s1 = #{extendS1,jdbcType=VARCHAR},
+      </if>
+      <if test="extendS2 != null">
+        extend_s2 = #{extendS2,jdbcType=VARCHAR},
+      </if>
+      <if test="extendS3 != null">
+        extend_s3 = #{extendS3,jdbcType=VARCHAR},
+      </if>
+      <if test="extendI1 != null">
+        extend_i1 = #{extendI1,jdbcType=DECIMAL},
+      </if>
+      <if test="extendI2 != null">
+        extend_i2 = #{extendI2,jdbcType=DECIMAL},
+      </if>
+      <if test="extendF1 != null">
+        extend_f1 = #{extendF1,jdbcType=DECIMAL},
+      </if>
+      <if test="extendF2 != null">
+        extend_f2 = #{extendF2,jdbcType=DECIMAL},
+      </if>
+      <if test="extendD1 != null">
+        extend_d1 = #{extendD1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="extendD2 != null">
+        extend_d2 = #{extendD2,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

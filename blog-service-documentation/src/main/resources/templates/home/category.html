@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>忆地球往事博客栏目页面</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/nprogress.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.min.css}">
+  <link rel="apple-touch-icon-precomposed" th:href="@{/images/icon/icon.png}">
+  <link rel="shortcut icon" th:href="@{/images/icon/favicon.ico}">
+  <script th:src="@{/js/jquery-2.1.4.min.js}"></script>
+  <script th:src="@{/js/nprogress.js}"></script>
+  <script th:src="@{/js/jquery.lazyload.min.js}"></script>
+  <!--[if gte IE 9]>
+  <script src="../static/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+  <script src="../static/js/html5shiv.min.js" type="text/javascript"></script>
+  <script src="../static/js/respond.min.js" type="text/javascript"></script>
+  <script src="../static/js/selectivizr-min.js" type="text/javascript"></script>
+  <![endif]-->
+
+  <!--[if lt IE 9]>
+  <script>window.location.href='upgrade-browser.html';</script>
+<![endif]-->
+</head>
+
+<body class="user-select">
+<div th:replace="/widgets/commonLogin :: commonHeader"></div>
+<section class="container">
+  <div class="content-wrap">
+    <div class="content">
+      <div class="title">
+        <h3 th:text="${tagName}"></h3>
+      </div>
+      <div th:each="blog : ${tagDocs}">
+        <article class="excerpt excerpt-1"><a class="focus" th:href="@{/blog/{id}(id=${blog.id})}" title=""><img class="thumb" data-original="images/excerpt.jpg" th:src="@{/images/excerpt.jpg}" alt=""></a>
+          <header><a class="cat" href="program" th:text="${blog.mainTag}"><i></i></a>
+            <h2><a th:href="@{/blog/{id}(id=${blog.id})}" title="" th:text="${blog.docName}"></a></h2>
+          </header>
+          <p class="meta">
+            <i class="glyphicon glyphicon-time"></i><time class="time" th:text="' '+ ${blog.createTime}"></time>
+            <i class="glyphicon glyphicon-eye-open"></i><span class="views" th:text="' 共' + ${blog.views}+ '人围观'"></span>  <i class="glyphicon glyphicon-comment"></i><a class="comment" href="../static/article.html#comment" th:text="' '+${blog.commentSize} + '个不明物体'"></a><i class="fa fa-user"><span title="创建者" data-toggle="tooltip" data-placement="bottom" th:text="' '+ ${blog.username}"></span></i></p>
+          <p class="note" th:text="|${blog.description}......|"></p>
+        </article>
+      </div>
+      <nav class="pagination" style="display: none;">
+        <ul>
+          <li class="prev-page"></li>
+          <li class="active"><span>1</span></li>
+          <li><a href="?page=2">2</a></li>
+          <li class="next-page"><a href="?page=2">下一页</a></li>
+          <li><span>共 2 页</span></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div th:replace="/widgets/aside :: aside"></div>
+</section>
+<div th:replace="/widgets/footer_web :: footer"></div>
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/jquery.ias.js"></script> 
+<script src="js/scripts.js"></script>
+</body>
+</html>

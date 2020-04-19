@@ -4,6 +4,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,16 @@ public class DateUtils {
     @NonNull
     public static LocalDateTime now() {
         return LocalDateTime.now();
+    }
+
+    /**
+     * Get standard formatted current date
+     *
+     * @return current date
+     */
+    @NonNull
+    public static String nowFormat() {
+        return now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     /**

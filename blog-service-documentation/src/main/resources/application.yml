@@ -70,7 +70,10 @@ logging:
         blog:
           service:
             documentation:
+              controller: debug
+              service: debug
               cache: debug
               mapper: debug
+              interceptor: debug
 
 

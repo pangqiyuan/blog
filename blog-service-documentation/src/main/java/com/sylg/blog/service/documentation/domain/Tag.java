@@ -1,13 +1,13 @@
 package com.sylg.blog.service.documentation.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +16,7 @@ import java.util.List;
  * @author: 忆地球往事
  * @create: 2020-04-08 16:33
  **/
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Document(collection = "documentation_tag")
@@ -23,8 +24,15 @@ public class Tag {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private String tid;
+
     private String name;
 
-    private List<Documentation> blogs = new ArrayList<>();
+    private Boolean isMainTag;
+
+    private Integer blogNumber;
+
+    private List<String> blogId;
+
+
 }

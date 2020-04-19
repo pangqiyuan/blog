@@ -1,4 +1,4 @@
-package com.sylg.blog.service.documentation.Exception;
+package com.sylg.blog.service.documentation.exception;
 
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
 import com.sylg.blog.service.documentation.common.dto.Result;
