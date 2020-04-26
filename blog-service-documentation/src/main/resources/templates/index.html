@@ -60,7 +60,7 @@
       </article>
       <div class="title">
         <h3>最新发布</h3>
-        <div class="more"><a href="">JAVA</a><a href="">微服务</a><a href="">Spring</a><a href="">分布式</a><a href="">MySQL</a></div>
+<!--        <div class="more"><a href="">JAVA</a><a href="">微服务</a><a href="">Spring</a><a href="">分布式</a><a href="">MySQL</a></div>-->
       </div>
       <div th:each="blog : ${bookList}">
         <article class="excerpt excerpt-1"><a class="focus" th:href="@{/blog/{id}(id=${blog.id})}" title=""><img class="thumb" data-original="images/excerpt.jpg" th:src="@{/images/excerpt.jpg}" alt=""></a>

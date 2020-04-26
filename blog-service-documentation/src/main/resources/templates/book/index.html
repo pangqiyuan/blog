@@ -53,7 +53,7 @@
                                         <a :href="'/book/' + item.docName + '/edit'" title="编辑博客" data-toggle="tooltip" target="_blank"><i class="fa fa-edit" aria-hidden="true"></i> 编辑博客</a>
                                     </template>
                                     <template v-if="item.role_id != 3">
-                                        <a :href="'/book/' + item._id + '/delete'" title="删除博客" data-toggle="tooltip" target="_blank"><i class="fa fa-edit" aria-hidden="true"></i> 删除博客</a>
+                                        <a :href="'/book/' + item.id + '/delete'" title="删除博客" data-toggle="tooltip" target="_self"><i class="fa fa-edit" aria-hidden="true"></i> 删除博客</a>
                                     </template>
                                 </div>
                                 <div class="clearfix"></div>
@@ -64,7 +64,7 @@
                                     </template>
                                     <template v-else="">
                                         <a :href="'/book/' +item.docName + '/dashboard'" title="博客概要" style="font-size: 12px;">
-                                        ${item.content}
+                                        ${item.description}
                                         </a>
                                     </template>
                             </div>
@@ -106,8 +106,11 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="标题(不超过100字)" name="docName" id="bookName">
                 </div>
+<!--                <div class="form-group">-->
+<!--                    <input type="text" class="form-control" placeholder="简要描述(不超过100字)" name="description" id="description">-->
+<!--                </div>-->
                 <div class="form-group">
-                    <textarea name="content" id="description" class="form-control" placeholder="博客内容" style="height: 90px;"></textarea>
+                    <textarea name="description" id="description" class="form-control" placeholder="简要描述(不超过100字)" style="height: 90px;"></textarea>
                 </div>
                 <div class="form-group">
                     <div class="col-lg-6">
@@ -144,6 +147,7 @@
 /*<![CDATA[*/
 var bookList = /*[[${bookList}]]*/;
 /*]]>*/
+
     $(function () {
         $("#addBookDialogForm").ajaxForm({
             beforeSubmit : function () {
@@ -167,7 +171,7 @@ var bookList = /*[[${bookList}]]*/;
                 if(res.code === "success"){
                     window.app.lists.splice(0,0,res.data);
                     $("#addBookDialogModal").modal("hide");
-                    window.location = "http://localhost:8081/book";
+                    window.location = "/book";
                 }else{
                     showError(res.message);
                 }

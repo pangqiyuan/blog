@@ -44,7 +44,7 @@
       <h1 class="article-title">标签云</h1>
     </header>
     <ul class="plinks ptags">
-      <li th:each="tag : ${tags}"><a href="" title="" target="_blank" >[[${tag.name}]] <span class="badge" th:text="${tag.blogNumber}"></span></a></li>
+      <li th:each="tag : ${tags}"><a th:href="@{/blog/docByTag/{mainTag}(mainTag=${tag.name})}" title="" target="_blank" >[[${tag.name}]] <span class="badge" th:text="${tag.blogNumber}"></span></a></li>
     </ul>
   </div>
 </section>

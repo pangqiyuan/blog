@@ -12,33 +12,33 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 公告类
+ * 博客审核类
  * @author 忆地球往事
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "announcement")
-public class Announcement {
+@Table(name = "blog_review")
+public class BlogReview {
     /**
-     * 公告id
+     * 临时博客推送id
      */
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "JDBC")
-    private Integer id;
+    private Long id;
 
     /**
-     * 公告内容
+     * 推送博客id
      */
-    @Column(name = "announcement_content")
-    private String announcementContent;
+    @Column(name = "blogId")
+    private String blogId;
 
     /**
-     * 公告时间
+     * 是否推送成功
      */
-    @Column(name = "announcement_time")
-    private String announcementTime;
+    @Column(name = "isPublish")
+    private Boolean isPublish;
 
     /**
      * 扩展 String 1

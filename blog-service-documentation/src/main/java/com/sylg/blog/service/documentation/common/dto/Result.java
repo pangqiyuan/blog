@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+/**
+ * 返回结果实体类
+ * @author 忆地球往事
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

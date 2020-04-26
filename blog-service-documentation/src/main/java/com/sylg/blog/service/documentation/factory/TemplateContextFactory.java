@@ -29,6 +29,13 @@ public class TemplateContextFactory {
     @Autowired
     private TemplateEngine templateEngine;
 
+    /**
+    * @Description: 发送mail为模板的内容
+    * @Param: [templateContext]
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     public String process(TemplateContext templateContext){
         Context context = findPasswordContext(templateContext);
         return templateEngine.process("mail.html", context);
@@ -39,10 +46,18 @@ public class TemplateContextFactory {
         return createContext(templateContext);
     }
 
+    /**
+    * @Description: 通过反射封装Context
+    * @Param: [templateContext]
+    * @return: org.thymeleaf.context.Context
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     private Context createContext(TemplateContext templateContext){
         Context context = new Context();
         Field[] declaredFields = templateContext.getClass().getDeclaredFields();
         for (Field declaredField : declaredFields) {
+            //获取所有字段的get方法名
             String field = "get" + declaredField.getName().substring(0,1).toUpperCase() + declaredField.getName().substring(1);
             try {
                 Method method = templateContext.getClass().getMethod(field);

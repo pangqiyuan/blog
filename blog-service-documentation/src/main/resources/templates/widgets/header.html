@@ -8,20 +8,23 @@
                         <a href="/" title="首页" >首页</a>
                     </li>
                     <li>
-                        <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="{{urlfor "LabelController.List" }}" title="标签">标签</a>
+                        <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="/backTag/tags" title="标签">标签</a>
+                    </li>
+                    <li>
+                        <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="/announcement/findAnnouncement" title="公告">公告</a>
                     </li>
                     <li>
                         <a th:if="${session.blogUser.getPwdQuestion()== null}" href="/setting/pwdQuestion" title="请先设置密保" style="color: red">请先设置密保，否则无法管理博客</a>
                     </li>
                 </ul>
-                <div th:if="${session.blogUser.getPwdQuestion()!= null}" class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">
-                    <form class="form-inline" action="{{urlfor "SearchController.Index"}}" method="get">
-                        <input class="form-control" name="keyword" type="search" style="width: 230px;" placeholder="请输入关键词..." value="">
-                        <button class="search-btn">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+<!--                <div th:if="${session.blogUser.getPwdQuestion()!= null}" class="searchbar pull-left visible-lg-inline-block visible-md-inline-block">-->
+<!--                    <form class="form-inline" action="{{urlfor "SearchController.Index"}}" method="get">-->
+<!--                        <input class="form-control" name="keyword" type="search" style="width: 230px;" placeholder="请输入关键词..." value="">-->
+<!--                        <button class="search-btn">-->
+<!--                            <i class="fa fa-search"></i>-->
+<!--                        </button>-->
+<!--                    </form>-->
+<!--                </div>-->
             </nav>
             <div class="btn-group dropdown-menu-right pull-right slidebar visible-xs-inline-block visible-sm-inline-block">
                 <button class="btn btn-default dropdown-toggle hidden-lg" type="button" data-toggle="dropdown"><i class="fa fa-align-justify"></i></button>
@@ -65,9 +68,9 @@
                         <li>
                             <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="/book/" title="我的项目"><i class="fa fa-book" aria-hidden="true" ></i> 我的博客</a>
                         </li>
-                         <!-- 管理员可见 判断role -->
+<!--                          管理员可见 判断role-->
                         <li>
-                            <a th:if="${session.blogUser.getPwdQuestion()!= null}" href="/manager/" title="管理后台"><i class="fa fa-university" aria-hidden="true"></i> 管理后台</a>
+                            <a th:if="${session.blogUser.getMgrType() == '0'}" href="/manager/" title="管理后台"><i class="fa fa-university" aria-hidden="true"></i> 管理后台</a>
                         </li>
                         <li>
                             <a href="/blog/user/logout" title="退出登录"><i class="fa fa-sign-out"></i> 退出登录</a>

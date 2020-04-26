@@ -19,9 +19,9 @@
             <div class="page-left">
                 <ul class="menu">
                    <!-- 注意设置权限 -->
-                    <li><a th:href="'/book/'+${identify}+'/dashboard'"  class="item"><i class="fa fa-dashboard" aria-hidden="true"></i> 概要</a> </li>
-                    <li class="active" ><a th:href="'/book/'+${identify}+'/users'"  class="item"><i class="fa fa-users" aria-hidden="true"></i> 成员</a> </li>
-                    <li><a th:href="'/book/'+${identify}+'/setting'" class="item"><i class="fa fa-gear" aria-hidden="true"></i> 设置</a> </li>
+                    <li><a th:href="'/book/'+${book.docName}+'/dashboard'"  class="item"><i class="fa fa-dashboard" aria-hidden="true"></i> 概要</a> </li>
+                    <li class="active" ><a th:href="'/book/'+${book.docName}+'/users'"  class="item"><i class="fa fa-users" aria-hidden="true"></i> 成员</a> </li>
+                    <li><a th:href="'/book/'+${book.docName}+'/setting'" class="item"><i class="fa fa-gear" aria-hidden="true"></i> 设置</a> </li>
                 </ul>
             </div>
             <div class="page-right">
@@ -34,15 +34,15 @@
                 </div>
                 <div class="box-body">
                     <div class="users-list" id="userList">
-                        <template v-if="lists.length <= 0">
+                        <template v-if="lists.length <= 0">users.html
                             <div class="text-center">暂无数据</div>
                         </template>
                         <template v-else>
                             <div class="list-item" v-for="item in lists">
-                                <img :src="item.avatar" onerror="this.src='images/middle.gif'" class="img-circle" width="34" height="34">
+<!--                                <img :src="item.avatar" onerror="this.src='images/middle.gif'" class="img-circle" width="34" height="34">-->
                                 <span>${item.[0]}</span>
                                 <div class="operate">
-                                    <template v-if="item.role_id == 0">
+                                    <template v-if="item.mgrType == '0'">
                                         创始人
                                     </template>
                                    <template v-else>

@@ -1,23 +1,14 @@
 package com.sylg.blog.service.documentation.controller.web;
 
 import com.sylg.blog.service.documentation.common.controller.BaseController;
-import com.sylg.blog.service.documentation.domain.Documentation;
-import com.sylg.blog.service.documentation.service.AnnouncementService;
-import com.sylg.blog.service.documentation.service.DocumentationService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.annotation.Resource;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -32,6 +23,13 @@ import java.util.Objects;
 public class IndexController extends BaseController {
 
 
+    /**
+    * @Description: 博客主页信息展示
+    * @Param: [pageable, map]
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     @GetMapping(value = "/")
     public String index(@PageableDefault(size = 8, sort = {"createTime"}, direction = Sort.Direction.DESC) Pageable pageable, ModelMap map)
     {
@@ -40,6 +38,13 @@ public class IndexController extends BaseController {
         return "index";
     }
 
+    /**
+    * @Description: 搜索博客
+    * @Param: [keyword, modelMap]
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     @GetMapping(value = "/search")
     public String search(String keyword , ModelMap modelMap){
         if(Objects.isNull(keyword)|| "".equals(keyword)){

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  *
  * @author pangqiyuan
- * @date 2019/3/29
+ * @date 2020/3/29
  *
  * 用户服务
  */
@@ -63,8 +63,21 @@ public interface BlogUserService{
     */
     BlogUser updatePasswordByLoginCode(BlogUser blogUser,String newPassword);
 
-
+    /**
+    * @Description: 根据账号更新用户密保
+    * @Param: [request, blogUser]
+    * @return: com.sylg.blog.service.documentation.domain.BlogUser
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     BlogUser updatePwdQuestionByLoginCode(HttpServletRequest request, BlogUser blogUser);
 
+    /**
+     * @Description: 根据账号确认用户密保
+     * @Param: [request, blogUser]
+     * @return: com.sylg.blog.service.documentation.domain.BlogUser
+     * @Author: 忆地球往事
+     * @Date: 2020/4/24
+     */
     boolean ackPwdQuestions(BlogUser blogUser,String loginCode);
 }

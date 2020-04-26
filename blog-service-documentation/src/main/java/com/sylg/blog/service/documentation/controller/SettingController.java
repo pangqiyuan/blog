@@ -27,17 +27,38 @@ public class SettingController {
     @Resource
     private BlogUserService blogUserService;
 
+    /**
+    * @Description: 用户设置页面
+    * @Param: []
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     @GetMapping(value = "")
     public String setting(){
         return "setting/index";
 
     }
 
+    /**
+    * @Description: 用户密保页面跳转
+    * @Param: []
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     @GetMapping(value = "/pwdQuestion")
     public String pwdQuestion(){
         return "setting/password_questions";
     }
 
+    /**
+     * @Description: 用户密保修改
+     * @Param: []
+     * @return: java.lang.String
+     * @Author: 忆地球往事
+     * @Date: 2020/4/24
+     */
     @PostMapping(value = "/pwdQuestion")
     public @ResponseBody Result pwdQuestion(BlogUser blogUser, HttpServletRequest request){
         BlogUser user = blogUserService.updatePwdQuestionByLoginCode(request, blogUser);

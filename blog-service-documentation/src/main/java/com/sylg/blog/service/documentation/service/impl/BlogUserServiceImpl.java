@@ -1,15 +1,19 @@
 package com.sylg.blog.service.documentation.service.impl;
 
 import com.sylg.blog.service.documentation.common.constants.Constans;
+import com.sylg.blog.service.documentation.domain.BlogUser;
+import com.sylg.blog.service.documentation.mapper.BlogUserMapper;
+import com.sylg.blog.service.documentation.service.BlogUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.sylg.blog.service.documentation.mapper.BlogUserMapper;
-import com.sylg.blog.service.documentation.domain.BlogUser;
-import com.sylg.blog.service.documentation.service.BlogUserService;
-
+/**
+ * blogUser service impl
+ * @author 忆地球往事
+ */
 @Service
 @Slf4j
 public class BlogUserServiceImpl implements BlogUserService{

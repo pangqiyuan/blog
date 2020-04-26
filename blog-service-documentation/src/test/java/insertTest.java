@@ -1,15 +1,12 @@
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.sylg.blog.service.documentation.ServiceDocumentationApplication;
 import com.sylg.blog.service.documentation.cache.ViewsCacheStore;
 import com.sylg.blog.service.documentation.common.dto.TemplateContext;
-import com.sylg.blog.service.documentation.common.utils.BlogUtils;
-import com.sylg.blog.service.documentation.domain.Tag;
-import com.sylg.blog.service.documentation.factory.TemplateContextFactory;
 import com.sylg.blog.service.documentation.controller.web.BlogController;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.domain.Documentation;
+import com.sylg.blog.service.documentation.factory.TemplateContextFactory;
 import com.sylg.blog.service.documentation.mapper.AnnouncementMapper;
+import com.sylg.blog.service.documentation.mapper.BlogReviewMapper;
 import com.sylg.blog.service.documentation.mapper.BlogUserMapper;
 import com.sylg.blog.service.documentation.repository.DocRepository;
 import com.sylg.blog.service.documentation.service.BlogUserService;
@@ -19,25 +16,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.MessagingException;
-import java.lang.reflect.Array;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ServiceDocumentationApplication.class)
@@ -72,8 +63,45 @@ public class insertTest {
     @Autowired
     private AnnouncementMapper announcementMapper;
 
+    @Autowired
+    private BlogReviewMapper blogReviewMapper;
+
+    @Test
+    public void testBlogReview(){
+        System.out.println(blogReviewMapper.findAllByIsPublishFalse());
+    }
+
     @Test
     public void testTagService(){
+        tagService.delete("5ea161595424d68759bdead9");
+        //Update update = new Update();
+        //Documentation documentation = new Documentation();
+        //documentation.setId("5e8d89bcd630012df022ead8");
+        //documentation.setUsername("pangqiyuan");
+        //Tag tag = new Tag();
+        //tag.setName("aaa");
+        //documentation.setTags(Collections.singletonList(tag));
+        //documentation.setIsComment(false);
+        //BlogUtils.createUpdate(update, documentation);
+        //String[] tags ={"a","b","c"};
+        //System.out.println(Arrays.stream(tags).map(s -> {
+        //    Tag tag = new Tag();
+        //    tag.setName(s);
+        //    return tag;
+        //}).collect(Collectors.toList()));
+        // List<Tag> tags = new ArrayList<>();
+       // Tag tag1 = new Tag();
+       // tag1.setName("a");
+       // Tag tag2 = new Tag();
+       // tag2.setName("b");
+       // Tag tag3 = new Tag();
+       // tag3.setName("c");
+       // tags.add(tag1);
+       // tags.add(tag2);
+       // tags.add(tag3);
+       // StringBuilder builder = new StringBuilder();
+       //tags.forEach(tag -> builder.append(tag.getName()).append(","));
+       // System.out.println(builder.toString());
         //System.out.println(tagService.findBlogIdByMainTag("JAVA后端"));
         //tagService.updateBlogId("5e9bfd23d6300156644423dd","5e8d89bcd630012df022ead8");
         //Tag tag = new Tag();
@@ -89,9 +117,16 @@ public class insertTest {
     }
     @Test
     public void testDesc(){
-        List<String> list = Arrays.asList("5e8d89bcd630012df022ead8", "5e98815677e85e000634861f");
-        List<Documentation> documentations = (List<Documentation>) docRepository.findAllById(list);
-        System.out.println(documentations);
+        List<String> list = Arrays.asList("5e8d89bcd630012df022ead8", "5ea16413d630015b6084945f","5e9881c777e85e0006348621");
+        Sort sort = new Sort(Sort.Direction.DESC, "views");
+        //PageRequest of = PageRequest.of(0, 8, sort);
+        //System.out.println(docRepository.findAllByIdAndIsPublishTrue(list, of).getContent());
+        Query query = new Query(new Criteria("_id").in(list).and("isPublish").is(true));
+        System.out.println(mongoTemplate.find(query.with(sort).limit(1), Documentation.class));
+        //System.out.println(docRepository.findAllByIdAndIsPublishTrue(list));
+        //List<Documentation> documentations = (List<Documentation>) docRepository.findAllById(list);
+        //System.out.println(documentations);
+
 
         //AggregationOperation aggregationOperation = new CountOperation("commentByBeans");
         //SortByCountOperation sortByCountOperation = new SortByCountOperation(aggregationOperation);

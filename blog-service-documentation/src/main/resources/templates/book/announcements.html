@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>公告 - Powered by MinDoc</title>
+     <!-- Bootstrap -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+<div class="manual-reader">
+    <div th:replace="/widgets/header :: header"></div>
+    <div class="container manual-body">
+        <div class="row">
+            <div class="page-left">
+                <ul class="menu">
+                   <!-- 注意设置权限 -->
+                    <li><a href="/announcement/findAnnouncement"  class="item"><i class="fa fa-dashboard" aria-hidden="true"></i> 公告管理</a> </li>
+                </ul>
+            </div>
+            <div class="page-right">
+                <div class="m-box">
+                    <div class="box-head">
+                        <strong class="box-title"> 公告管理</strong>
+                        <!-- 权限设置 -->
+                        <button type="button"  class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addBookMemberDialogModal"><i class="fa fa-user-plus" aria-hidden="true"></i> 添加公告</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="users-list" id="announcementList">
+                        <template v-if="lists.length <= 0">
+                            <div class="text-center">暂无数据</div>
+                        </template>
+                        <template v-else>
+                            <div>
+                                公告
+                                <div>
+                                    <a class="list-item" v-for="item in lists" >
+                                        <div>
+                                            <button type="button" class="btn btn-default btn-sm"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px">
+                                                ${item.announcementContent}
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="removeBookMember(item.id)" style="margin-top: 5px">移除</button>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div th:replace="/widgets/footer :: footer"></div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addBookMemberDialogModal" tabindex="-1" role="dialog" aria-labelledby="addBookMemberDialogModalLabel">
+    <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
+        <form method="post" autocomplete="off" class="form-horizontal" action="/announcement/insertAnnouncement" id="addBookMemberDialogForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加公告</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10">
+                            <textarea name="announcementContent" id="announcementContent" class="form-control" placeholder="公告内容(不超过50字)" style="height: 90px;" maxlength="50"></textarea>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <span id="form-error-message"></span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-success" data-loading-text="保存中..." id="btnAddMember">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!--END Modal-->
+<script th:src="@{/jquery/1.12.4/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/vuejs/vue.min.js}"></script>
+<script th:src="@{/js/jquery.form.js}" type="text/javascript"></script>
+<script th:src="@{/js/main.js}" type="text/javascript"></script>
+<script th:src="@{/layer/layer.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+//JS中获取对象
+/*<![CDATA[*/
+var announcementList = /*[[${announcementList}]]*/;
+/*]]>*/
+    $(function () {
+        $("#addBookMemberDialogForm").ajaxForm({
+            beforeSubmit : function () {
+                var account = $.trim($("#announcementContent").val());
+                if(account === ""){
+                    return showError("内容不能为空");
+                }
+                $("#btnAddMember").button("loading");
+            },
+            success : function (res) {
+                if(res.code === "success"){
+                    $("#addBookMemberDialogModal").modal("hide");
+                    window.location = "/announcement/findAnnouncement";
+                }else{
+                    showError(res.msg);
+                }
+                $("#btnAddMember").button("reset");
+            }
+        });
+
+        var app = new Vue({
+            el : "#announcementList",
+            data : {
+                lists : announcementList,
+            },
+            delimiters : ['${','}'],
+            methods : {
+                removeBookMember : function (id) {
+                    var $this = this;
+                    $.ajax({
+                        url : "/announcement/deleteAnnouncement",
+                        type :"post",
+                        dataType :"json",
+                        data :{ "id" : id},
+                        success : function (res) {
+                            if(res.code === "success"){
+                                window.location = "/announcement/findAnnouncement";
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        Vue.nextTick(function () {
+            $("[data-toggle='tooltip']").tooltip();
+        });
+    });
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title th:inline="text">设置 - [[${book.bookName}]] - Powered by MinDoc</title>
+    <title th:inline="text">设置 - [[${book.docName}]] - Powered by MinDoc</title>
     <!-- Bootstrap -->
     <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
@@ -24,64 +24,66 @@
             <div class="page-left">
                 <ul class="menu">
                     <!-- 注意设置权限 -->
-                    <li><a th:href="'/book/'+${book.identify}+'/dashboard'"  class="item"><i class="fa fa-dashboard" aria-hidden="true"></i> 概要</a> </li>
-                    <li><a th:href="'/book/'+${book.identify}+'/users'"  class="item"><i class="fa fa-users" aria-hidden="true"></i> 成员</a> </li>
-                    <li class="active"><a th:href="'/book/'+${book.identify}+'/setting'" class="item"><i class="fa fa-gear" aria-hidden="true"></i> 设置</a> </li>
+                    <li><a th:href="'/book/'+${book.docName}+'/dashboard'"  class="item"><i class="fa fa-dashboard" aria-hidden="true"></i> 概要</a> </li>
+                    <li><a th:href="'/book/'+${book.docName}+'/users'"  class="item"><i class="fa fa-users" aria-hidden="true"></i> 成员</a> </li>
+                    <li class="active"><a th:href="'/book/'+${book.docName}+'/setting'" class="item"><i class="fa fa-gear" aria-hidden="true"></i> 设置</a> </li>
                 </ul>
 
             </div>
             <div class="page-right">
                 <div class="m-box">
                     <div class="box-head">
-                        <strong class="box-title"> 项目设置</strong>
-                        <button type="button"  class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#transferBookModal">转让项目</button>
+                        <strong class="box-title"> 博客设置</strong>
+                        <button type="button"  class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#transferBookModal">转让博客</button>
                         <button type="button"  class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#changePrivatelyOwnedModal" style="margin-right: 5px;">转为公有</button>
                         <button type="button"  class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#changePrivatelyOwnedModal" style="margin-right: 5px;">转为私有</button>
-                        <button type="button"  class="btn btn-danger btn-sm pull-right" style="margin-right: 5px;" data-toggle="modal" data-target="#deleteBookModal">删除项目</button>
+                        <button type="button"  class="btn btn-danger btn-sm pull-right" style="margin-right: 5px;" data-toggle="modal" data-target="#deleteBookModal">删除博客</button>
+                        <button th:if="${session.blogUser.getMgrType() == '0' && book.isPublish == false}" type="button"  class="btn btn-danger btn-sm pull-right" style="margin-right: 5px;" data-toggle="modal" data-target="#reviewBookModal">审核博客</button>
                     </div>
                 </div>
                 <div class="box-body" style="padding-right: 200px;">
                     <div class="form-left">
                         <form method="post" id="bookEditForm" action="/book/saveBook">
-                            <input type="hidden" name="identify" th:value="${book.Identify}">
+                            <input type="hidden" name="identify" th:value="${book.id}">
                             <div class="form-group">
                                 <label>标题</label>
-                                <input type="text" class="form-control" name="bookName" id="bookName" placeholder="项目名称" th:value="${book.bookName}">
+                                <input type="text" class="form-control" name="bookName" id="bookName" placeholder="项目名称" th:value="${book.docName}">
                             </div>
                             <div class="form-group">
                                 <label>标识</label>
-                                <input type="text" class="form-control" th:value="${serverPath}+'docs/'+${book.identify}" placeholder="项目唯一标识" disabled>
+                                <input type="text" class="form-control" th:value="'docs/'+${book.docName}" placeholder="项目唯一标识" disabled>-->
+<!--                                <input type="text" class="form-control" th:value="${serverPath}+'docs/'+${book.docName}" placeholder="项目唯一标识" disabled>-->
                             </div>
                             <div class="form-group">
                                 <label>描述</label>
-                                <textarea rows="3" class="form-control" name="description" style="height: 90px" placeholder="项目描述" th:value="${book.description}"></textarea>
+                                <textarea rows="3" class="form-control" name="description" style="height: 90px" placeholder="项目描述" th:text="${book.description}"></textarea>
                                 <p class="text">描述信息不超过500个字符,支持Markdown语法</p>
                             </div>
                             <div class="form-group">
                                 <label>标签</label>
-                                <input type="text" class="form-control" name="label" placeholder="项目标签" th:value="${book.label}">
+                                <input type="text" class="form-control" name="label" placeholder="项目标签" th:value="${book.mainTag}">
                                 <p class="text">最多允许添加10个标签，多个标签请用“,”分割</p>
                             </div>
                             <div class="form-group">
-                                <label>编辑器</label>
-                                <div class="radio" th:switch="${book.editor}">
-                                    <p th:case="'markdown'"> 
-                                        <label class="radio-inline">
-                                             <input type="radio" checked name="editor" value="markdown"> Markdown编辑器
-	                                    </label>
-	                                    <label class="radio-inline">
-	                                        <input type="radio"  name="editor" value="html"> Html编辑器
-	                                    </label>
-                                    </p>
-                                    <p th:case="'html'">
-                                        <label class="radio-inline">
-                                             <input type="radio" name="editor" value="markdown"> Markdown编辑器
-	                                    </label>
-	                                    <label class="radio-inline">
-	                                        <input type="radio" checked name="editor" value="html"> Html编辑器
-	                                    </label>
-                                    </p>
-                                </div>
+<!--                                <label>编辑器</label>-->
+<!--                                <div class="radio" th:switch="${book.editor}">-->
+<!--                                    <p th:case="'markdown'">-->
+<!--                                        <label class="radio-inline">-->
+<!--                                             <input type="radio" checked name="editor" value="markdown"> Markdown编辑器-->
+<!--	                                    </label>-->
+<!--	                                    <label class="radio-inline">-->
+<!--	                                        <input type="radio"  name="editor" value="html"> Html编辑器-->
+<!--	                                    </label>-->
+<!--                                    </p>-->
+<!--                                    <p th:case="'html'">-->
+<!--                                        <label class="radio-inline">-->
+<!--                                             <input type="radio" name="editor" value="markdown"> Markdown编辑器-->
+<!--	                                    </label>-->
+<!--	                                    <label class="radio-inline">-->
+<!--	                                        <input type="radio" checked name="editor" value="html"> Html编辑器-->
+<!--	                                    </label>-->
+<!--                                    </p>-->
+<!--                                </div>-->
                             </div>
                 <!-- 私有项目 访问令牌 -->
                 <div class="form-group" style="display: none">
@@ -102,13 +104,13 @@
                 </div>
                 </form>
             </div>
-            <div class="form-right">
-                <label>
-                    <a href="javascript:;" data-toggle="modal" data-target="#upload-logo-panel">
-                        <img th:src="${book.cover}" onerror="this.src='/images/book.png'" alt="封面" style="max-width: 120px;border: 1px solid #999" id="headimgurl">
-                    </a>
-                </label>
-            </div>
+<!--            <div class="form-right">-->
+<!--                <label>-->
+<!--                    <a href="javascript:;" data-toggle="modal" data-target="#upload-logo-panel">-->
+<!--                        <img th:src="${book.cover}" onerror="this.src='/images/book.png'" alt="封面" style="max-width: 120px;border: 1px solid #999" id="headimgurl">-->
+<!--                    </a>-->
+<!--                </label>-->
+<!--            </div>-->
             <div class="clearfix"></div>
 
         </div>
@@ -215,6 +217,33 @@
         </form>
     </div>
 </div>
+
+<!-- review Book Modal -->
+<div class="modal fade" id="reviewBookModal" tabindex="-1" role="dialog" aria-labelledby="deleteBookModalLabel">
+    <div class="modal-dialog" role="document">
+        <form method="post" id="reviewBookForm">
+        <input type="hidden" id="bookId" name="id" th:value="${book.id}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">审核博客</h4>
+            </div>
+            <div class="modal-body">
+                <span style="font-size: 14px;font-weight: 400;">确定该博客是否审核通过吗？</span>
+                <p></p>
+                <p class="text error-message">审核确认后项将无法再次审核。</p>
+            </div>
+            <div class="modal-footer">
+<!--                <span id="form-error-message2" class="error-message"></span>-->
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="btnNotReviewBook" class="btn btn-primary" data-loading-text="确认中...">审核不通过</button>
+                <button type="button" id="btnReviewBook" class="btn btn-primary" data-loading-text="确认中..." >审核通过</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="transferBookModal" tabindex="-1" role="dialog" aria-labelledby="transferBookModalLabel">
     <div class="modal-dialog" role="document">
@@ -251,8 +280,124 @@
 <script th:src="@{/js/jquery.form.js}" type="text/javascript"></script>
 <script th:src="@{/bootstrap/plugins/tagsinput/bootstrap-tagsinput.min.js}" type="text/javascript"></script>
 <script th:src="@{/js/main.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+    $(function () {
+        $("#btnReviewBook").on("click",function () {
+            var id = $("#bookId").val();
+            $.ajax({
+                url : "/manager/reviewBlog",
+                type : "POST",
+                dataType: "json",
+                data : {"id": id ,"isReview":true},
+                success : function (res) {
+                    if(res.code === "success"){
+                        $("#reviewBookModal").modal("hide");
+                        window.location = "/manager/reviewSuccess";
+                    }else{
+                        showError(res.msg);
+                    }
+                }
+            });
+        });
 
+
+        $("#btnNotReviewBook").on("click",function () {
+            var id = $("#bookId").val();
+            $.ajax({
+                url : "/manager/reviewBlog",
+                type : "POST",
+                dataType: "json",
+                data : {"id": id ,"isReview":false},
+                success : function (res) {
+                    if(res.code === "success"){
+                        $("#reviewBookModal").modal("hide");
+                        window.location = "/manager/";
+                    }else{
+                        showError(res.msg);
+                    }
+                }
+            });
+        });
+
+    });
+    // $(function () {
+    //     $("#reviewBookForm").ajaxForm({
+    //         beforeSubmit: function () {
+    //             if($("#btnReviewBook").click){
+    //                 $("#btnReviewBook").button("loading");
+    //                 var id = $("#bookId").val();
+    //                 $.ajax({
+    //                     url : "/manager/reviewBlog",
+    //                     type : "POST",
+    //                     dataType: "json",
+    //                     data : {"id": id ,"isReview":true}
+    //                 })
+    //             }else {
+    //                 $("#btnNotReviewBook").button("loading");
+    //                 var id = $("#bookId").val();
+    //                 $.ajax({
+    //                     url : "/manager/reviewBlog",
+    //                     type : "POST",
+    //                     dataType: "json",
+    //                     data : {"id": id ,"isReview":false}
+    //                 })
+    //             }
+    //         },
+    //         success: function (res) {
+    //             $("#btnReviewBook").button("reset");
+    //             if (res.code === "success") {
+    //                 $("#reviewBookModal").modal("hide");
+    //                 window.location = "/book";
+    //             } else {
+    //                 showError(res.msg);
+    //             }
+    //         }
+    //     });
+    // });
+</script>
 <script type="text/javascript">
+
+    // $(function () {
+        // $("#reviewBookForm").ajaxForm({
+        //     beforeSubmit : function () {
+        //         $("#btnReviewBook").button("loading");
+        //         alert("aaa");
+        //         $("#btnReviewBook").onclick(function () {
+        //             alert("aa");
+        //             // $("#btnReviewBook").button("loading");
+        //             $.ajax({
+        //                 url : "/manager/reviewBlog",
+        //                 type : "POST",
+        //                 dataType: "json",
+        //                 data : {"id": "111","isReview":true}
+        //             })
+        //         });
+                // $("#btnNotReviewBook").onclick(function () {
+                //     $("#btnNotReviewBook").button("loading");
+                //     var id = $(this).attr("id");
+                //     alert(id);
+                //     $.ajax({
+                //         url : "/manager/reviewBlog",
+                //         data : {"id": id ,"isReview":false},
+                //         type : "POST",
+                //     })
+                // });
+    //         },
+    //         success : function (res) {
+    //             if(res.code === "success"){
+    //                 window.location = "/manager/reviewSuccess";
+    //             }else{
+    //                 showError(res.message,"#form-error-message2");
+    //             }
+    //             $("#btnDeleteBook").button("reset");
+    //         },
+    //         error : function () {
+    //             showError("服务器异常","#form-error-message2");
+    //             $("#btnDeleteBook").button("reset");
+    //         }
+    //     });
+    // });
+
     $(function () {
         $("#upload-logo-panel").on("hidden.bs.modal",function () {
             $("#upload-logo-panel").find(".modal-body").html(window.modalHtml);

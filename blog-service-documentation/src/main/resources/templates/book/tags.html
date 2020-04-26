@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>标签 - Powered by MinDoc</title>
+     <!-- Bootstrap -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+<div class="manual-reader">
+    <div th:replace="/widgets/header :: header"></div>
+    <div class="container manual-body">
+        <div class="row">
+            <div class="page-left">
+                <ul class="menu">
+                   <!-- 注意设置权限 -->
+                    <li><a href="/backTag/tags"  class="item"><i class="fa fa-dashboard" aria-hidden="true"></i> 标签管理</a> </li>
+                </ul>
+            </div>
+            <div class="page-right">
+                <div class="m-box">
+                    <div class="box-head">
+                        <strong class="box-title"> 标签管理</strong>
+                        <!-- 权限设置 -->
+                        <button type="button"  class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addBookMemberDialogModal"><i class="fa fa-user-plus" aria-hidden="true"></i> 添加标签</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="users-list" id="tagList">
+                        <template v-if="lists.length <= 0">
+                            <div class="text-center">暂无数据</div>
+                        </template>
+                        <template v-else>
+                            <div>
+                                主标签
+                                <a class="list-item" v-for="item in lists" v-if="item.isMainTag == true" >
+                                        <button type="button" class="btn btn-default btn-sm"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px">
+                                            ${item.name}
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="removeBookMember(item.tid)" style="margin-top: 5px">移除</button>
+                                </a>
+                            </div>
+                            <div style="margin-top: 20px">
+                                其他标签
+                            <a class="list-item" v-for="item in lists" v-if="item.isMainTag == false">
+                                    <button type="button" class="btn btn-default btn-sm"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px">
+                                        ${item.name}
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="removeBookMember(item.tid)" style="margin-top: 5px">移除</button>
+                            </a>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div th:replace="/widgets/footer :: footer"></div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addBookMemberDialogModal" tabindex="-1" role="dialog" aria-labelledby="addBookMemberDialogModalLabel">
+    <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
+        <form method="post" autocomplete="off" class="form-horizontal" action="/backTag/insertTag" id="addBookMemberDialogForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加标签</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">名字</label>
+                       <div class="col-sm-10">
+                           <input type="text" name="name" class="form-control" placeholder="标签名" id="account" maxlength="50">
+                       </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">角色</label>
+                        <div class="col-sm-10">
+                            <select name="isMainTag" class="form-control">
+                                <option value="true">主标签</option>
+                                <option value="false">其他标签</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <span id="form-error-message"></span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-success" data-loading-text="保存中..." id="btnAddMember">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!--END Modal-->
+<script th:src="@{/jquery/1.12.4/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/vuejs/vue.min.js}"></script>
+<script th:src="@{/js/jquery.form.js}" type="text/javascript"></script>
+<script th:src="@{/js/main.js}" type="text/javascript"></script>
+<script th:src="@{/layer/layer.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+//JS中获取对象
+/*<![CDATA[*/
+var tagList = /*[[${tagList}]]*/;
+/*]]>*/
+    $(function () {
+        $("#addBookMemberDialogForm").ajaxForm({
+            beforeSubmit : function () {
+                var account = $.trim($("#account").val());
+                if(account === ""){
+                    return showError("标签不能为空");
+                }
+                $("#btnAddMember").button("loading");
+            },
+            success : function (res) {
+                if(res.code === "success"){
+                    $("#addBookMemberDialogModal").modal("hide");
+                    window.location = "/backTag/tags";
+                }else{
+                    showError(res.msg);
+                }
+                $("#btnAddMember").button("reset");
+            }
+        });
+
+        var app = new Vue({
+            el : "#tagList",
+            data : {
+                lists : tagList,
+            },
+            delimiters : ['${','}'],
+            methods : {
+                removeBookMember : function (tid) {
+                    var $this = this;
+                    $.ajax({
+                        url : "/backTag/deleteTag",
+                        type :"post",
+                        dataType :"json",
+                        data :{ "tid" : tid},
+                        success : function (res) {
+                            if(res.code === "success"){
+                                window.location = "/backTag/tags";
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        Vue.nextTick(function () {
+            $("[data-toggle='tooltip']").tooltip();
+        });
+    });
+</script>
+</body>
+</html>

@@ -30,21 +30,22 @@
                             <i class="fa fa-unlock" aria-hidden="true" title="公开项目" data-toggle="tooltip"></i>
                         </strong>
                         <a th:href="'/book/'+${book.docName}+'/edit'" class="btn btn-default btn-sm pull-right" target="_blank"><i class="fa fa-edit" aria-hidden="true"></i> 编辑</a>
-                        <a th:href="'/docs/'+${book.docName}" class="btn btn-default btn-sm pull-right" style="margin-right: 5px;" target="_blank"><i class="fa fa-eye"></i> 阅读</a>
-                        <button class="btn btn-default btn-sm pull-right" style="margin-right: 5px;" id="btnRelease"><i class="fa fa-upload" aria-hidden="true"></i> 发布</button>
+                        <a href="javascript:void(0)" th:action="'/book/'+${book.id}+'/publish'" class="btn btn-default btn-sm pull-right" style="margin-right: 5px;" id="btnRelease"><i class="fa fa-upload" aria-hidden="true"></i> 发布</a>
                     </div>
                 </div>
                 <div class="box-body">
                     <div class="dashboard">
                         <div class="pull-left" style="width: 200px;margin-bottom: 15px;">
-                            <div class="book-image">
-                                <!--<img th:src="${book.cover}" onerror="this.src='/images/book.jpg'" width="174" height="229" style="border: 1px solid #666">-->
-                            </div>
-                        </div>
-
+<!--                            <div class="book-image">-->
+<!--                                &lt;!&ndash;<img th:src="${book.cover}" onerror="this.src='/images/book.jpg'" width="174" height="229" style="border: 1px solid #666">&ndash;&gt;-->
+<!--                            </div>-->
                             <div class="list">
                                 <span class="title">创建者：</span>
                                 <span class="body" th:text="${book.username}"></span>
+                            </div>
+                            <div class="list">
+                                <span class="title">文档描述：</span>
+                                <span class="body" th:text="${book.description}"></span>
                             </div>
                             <div class="list">
                                 <span class="title">文档内容：</span>
@@ -52,7 +53,6 @@
                             </div>
                             <div class="list">
                                 <span class="title">创建时间：</span>
-
                                 <span class="body" th:text="${book.createTime}"> </span>
                             </div>
                             <div class="list">
@@ -62,14 +62,14 @@
                                 </span>
                             </div>
                             <div class="list">
-                                <span class="title">担任角色：</span>
-                                <span class="body">管理员</span>
+                                <span class="title">文档主标签：</span>
+                                <span class="body" th:text="${book.mainTag}"></span>
                             </div>
-                    <!--<div class="list">-->
-                        <!--<span class="title">文档标签：</span>-->
-                        <!--<span class="body" th:text="${book.label}"></span>-->
-                    <!--</div>-->
-                        <div class="summary" th:text="${book.commentBy}"></div>
+                            <div class="list" th:if="${book.tags}">
+                                <span class="title">文档标签：</span>
+                                <span class="body" th:each="tag : ${book.tags}" th:text="${tag.name} + ','"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,13 +84,12 @@
 <script type="text/javascript">
     $(function () {
         $("#btnRelease").on("click",function () {
+            var url = $(this).attr("action");
             $.ajax({
-                url : "{{urlfor "BookController.Release" ":key" .Model.Identify}}",
-                data :{"identify" : "{{.Model.Identify}}" },
-                type : "post",
-                dataType : "json",
+                url : url,
+                type: "get",
                 success : function (res) {
-                    if(res.errcode === 0){
+                    if(res.code === "success"){
                         layer.msg("发布任务已推送到任务队列，稍后将在后台执行。");
                     }else{
                         layer.msg(res.message);

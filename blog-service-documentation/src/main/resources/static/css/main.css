@@ -236,7 +236,7 @@ textarea{
     padding-left: 15px;
     padding-right: 15px;
     margin: 18px 0;
-    height: 280px
+    height: 50px
 }
 .manual-list .list-item .manual-item-standard{
     float: left;
@@ -348,7 +348,7 @@ textarea{
 }
 /************文档成员*************************/
 .users-list .list-item{
-    padding: 12px;
+    margin: 15px;
     border-bottom: 1px dotted #EEE;
 }
 .users-list .list-item:hover {

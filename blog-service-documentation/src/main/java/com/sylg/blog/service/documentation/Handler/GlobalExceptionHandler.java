@@ -1,7 +1,8 @@
-package com.sylg.blog.service.documentation.exception;
+package com.sylg.blog.service.documentation.Handler;
 
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
 import com.sylg.blog.service.documentation.common.dto.Result;
+import com.sylg.blog.service.documentation.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.validation.BindException;
@@ -32,8 +33,27 @@ public class GlobalExceptionHandler {
         return BaseResult.error(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
+    /**
+     * 用户异常处理
+     */
+    @ExceptionHandler(UserException.class)
+    public ModelAndView userExceptionHandler(HttpServletRequest request, UserException e) {
+
+        log.error("Requst URL : {}，Exception : {}", request.getRequestURL(),e);
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("url",e.getUrl());
+        mv.addObject("exception", e.getMessage());
+        mv.setViewName("error/error");
+        return mv;
+    }
+
+    /**
+     * 异常处理
+     */
     @ExceptionHandler(Exception.class)
-    public ModelAndView exceptionHander(HttpServletRequest request, Exception e) throws Exception {
+    public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) throws Exception {
+
         log.error("Requst URL : {}，Exception : {}", request.getRequestURL(),e);
 
         if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
@@ -41,8 +61,8 @@ public class GlobalExceptionHandler {
         }
 
         ModelAndView mv = new ModelAndView();
-        mv.addObject("url",request.getRequestURL());
-        mv.addObject("exception", e);
+        mv.addObject("url","/");
+        mv.addObject("exception", e.getMessage());
         mv.setViewName("error/error");
         return mv;
     }

@@ -1,14 +1,17 @@
 package com.sylg.blog.service.documentation.common.utils;
 
-import com.sylg.blog.service.documentation.common.constants.ScoreTime;
 import com.sylg.blog.service.documentation.exception.BlogScoreException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.lang.NonNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -20,7 +23,33 @@ import java.util.regex.Pattern;
  **/
 public class BlogUtils {
 
-
+    /**
+    * @Description: 通过反射给update进行赋值，若为空跳过
+    * @Param: [update, o]
+    * @return: org.springframework.data.mongodb.core.query.Update
+    * @Author: 忆地球往事
+    * @Date: 2020/4/22
+    */
+    public static Update createUpdate(Update update,Object o){
+        Class<?> oClass = o.getClass();
+        Field[] fields = oClass.getDeclaredFields();
+        for (Field declaredField : fields) {
+            if("id".equals(declaredField.getName())){
+                continue;
+            }
+            String field = "get" + declaredField.getName().substring(0,1).toUpperCase() + declaredField.getName().substring(1);
+            try {
+                Method method = oClass.getMethod(field);
+                Object value = method.invoke(o);
+                if (!Objects.isNull(value)) {
+                    update.set(declaredField.getName(),value);
+                }
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return update;
+    }
     /**
      * Gets random uuid without dash.
      *n
@@ -42,6 +71,7 @@ public class BlogUtils {
 
         return Pattern.compile("^.*"+ keyword +".*$", Pattern.CASE_INSENSITIVE);
     }
+
     /**
      * Calculate blog score
      * @param views 观看量
@@ -61,10 +91,24 @@ public class BlogUtils {
         }
     }
 
+    /**
+    * @Description: 计算得分
+    * @Param: [views 观看量, minutes 时间差]
+    * @return: java.lang.Double
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     private static Double computeScore(Integer views ,Long minutes ){
         return   wilsonScore((double)views,(double)minutes,2.00);
     }
 
+    /**
+    * @Description: 使用威尔逊得分算法
+    * @Param: [u, n, zP]
+    * @return: double
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     private static double wilsonScore(double u, double n, double zP) {
         // 好评率
         try {

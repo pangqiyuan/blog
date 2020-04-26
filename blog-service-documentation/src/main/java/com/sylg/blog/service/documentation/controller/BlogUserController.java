@@ -5,6 +5,8 @@ import com.sylg.blog.service.documentation.common.constants.Constans;
 import com.sylg.blog.service.documentation.common.dto.BaseResult;
 import com.sylg.blog.service.documentation.domain.BlogUser;
 import com.sylg.blog.service.documentation.common.dto.Result;
+import com.sylg.blog.service.documentation.exception.EmailException;
+import com.sylg.blog.service.documentation.exception.PwdStatusException;
 import com.sylg.blog.service.documentation.service.BlogUserService;
 import com.sylg.blog.service.documentation.service.MailService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  *
@@ -167,6 +170,11 @@ public class BlogUserController {
     @GetMapping(value="/pwdQuestion")
     public String pwdQuestion(ModelMap modelMap, HttpServletRequest request) {
         String mailLoginCode = (String) request.getSession().getAttribute("mailLoginCode");
+        if(Objects.isNull(mailLoginCode)){
+            EmailException emailException = new EmailException("未进行邮箱验证");
+            emailException.setUrl("/blog/user/find_password");
+            throw emailException;
+        }
         BlogUser blogUser = blogUserService.selectOneByLoginCode(mailLoginCode);
         modelMap.addAttribute("blogUser",blogUser);
         log.info("邮箱认证后，进行密保确认页面跳转");
@@ -176,6 +184,11 @@ public class BlogUserController {
     @PostMapping(value="/pwdQuestion")
     public @ResponseBody Result pwdQuestion(BlogUser blogUser, HttpServletRequest request) {
         String mailLoginCode = (String) request.getSession().getAttribute("mailLoginCode");
+        if(Objects.isNull(mailLoginCode)){
+            EmailException emailException = new EmailException("未进行邮箱验证");
+            emailException.setUrl("/blog/user/find_password");
+            throw emailException;
+        }
         boolean success = blogUserService.ackPwdQuestions(blogUser, mailLoginCode);
         log.info("临时设置用户{}密保状态:{}" , blogUser.getLoginCode(),success);
         request.getSession().setAttribute("pwdStatus",success);
@@ -192,9 +205,11 @@ public class BlogUserController {
     @GetMapping(value="/email_password")
     public String emailPassword(HttpServletRequest request) {
         Boolean pwdStatus = (Boolean) request.getSession().getAttribute("pwdStatus");
-        if (pwdStatus == null || !pwdStatus) {
-            return "setting/ackPwdQuestion";
-        }
+            if (pwdStatus == null || !pwdStatus) {
+                PwdStatusException pwdStatusException = new PwdStatusException("密保确认不成功，请先进行密保确认");
+                pwdStatusException.setUrl("/blog/user/pwdQuestion");
+                throw pwdStatusException;
+            }
         log.info("邮箱认证后，找回密码");
         return "setting/email_password";
     }

@@ -1,15 +1,22 @@
 package com.sylg.blog.service.documentation.domain;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.*;
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
+import java.util.Date;
 
-import lombok.Data;
-
+/**
+ * 用户类
+ * @author 忆地球往事
+ */
 @Data
 @Table(name = "blog_user")
 public class BlogUser {
@@ -92,7 +99,7 @@ public class BlogUser {
     private String mobileImei;
 
     /**
-     * 管理员类型（0非管理员 1系统管理员  2二级管理员）
+     * 管理员类型（0创始人 1管理员  2编辑者 3观察者）
      */
     @Column(name = "mgr_type")
     private String mgrType;

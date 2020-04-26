@@ -42,37 +42,27 @@
         <pre class="prettyprint lang-php" th:text="${book.content}"></pre>
         <p class="article-copyright hidden-xs">未经允许不得转载：<a href="">忆地球往事博客</a> » <a href="article.html" th:text="${book.docName}"></a></p>
       </article>
-      <div class="article-tags" >标签：<a href="" rel="tag" th:each="tag : ${book.tags}" th:text="${tag.name}"></a></div>
+      <div class="article-tags" >标签：<a th:href="@{/blog/docByTag/{mainTag}(mainTag=${tag.name})}" rel="tag" th:each="tag : ${book.tags}" th:text="${tag.name}"></a></div>
       <div class="relates">
         <div class="title">
           <h3>相关推荐</h3>
         </div>
         <ul>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
+          <li th:each=" bookByMainTag : ${bookByMT}"><a th:href="@{/blog/{id}(id=${bookByMainTag.id})}" th:text="${bookByMainTag.docName}"></a></li>
         </ul>
       </div>
       <div class="title" id="comment">
         <h3>评论 <small>抢沙发</small></h3>
       </div>
-      <!--<div id="respond">
+      <div id="respond" th:if="${!book.isComment}">
         <div class="comment-signarea">
-          <h3 class="text-muted">评论前必须登录！</h3>
-          <p> <a href="javascript:;" class="btn btn-primary login" rel="nofollow">立即登录</a> &nbsp; <a href="javascript:;" class="btn btn-default register" rel="nofollow">注册</a> </p>
           <h3 class="text-muted">当前文章禁止评论</h3>
         </div>
-      </div>-->
-      <div id="respond">
+      </div>
+      <div id="respond" th:if="${book.isComment}">
         <div class="comment-signarea" th:if="${session.blogUser == null}">
           <h3 class="text-muted">评论前必须登录！</h3>
           <p> <a href="/blog/user/login" class="btn btn-primary login" rel="nofollow">立即登录</a> &nbsp; <a href="/blog/user/register" class="btn btn-default register" rel="nofollow">注册</a> </p>
-          <h3 class="text-muted" th:if="${book.isComment}">当前文章禁止评论</h3>
         </div>
 
         <form action="" method="post" id="comment-form" role="form">

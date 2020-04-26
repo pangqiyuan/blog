@@ -1,12 +1,9 @@
 package com.sylg.blog.service.documentation.controller.web;
 
-import com.sylg.blog.service.documentation.domain.Tag;
-import com.sylg.blog.service.documentation.service.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sylg.blog.service.documentation.common.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * @program: blog
@@ -15,17 +12,20 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @create: 2020-04-18 19:09
  **/
 @Controller
-public class TagController {
+public class TagController extends BaseController {
 
-    private final TagService tagService;
 
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
-    }
-
+    /**
+    * @Description: 返回所有标签并排序
+    * @Param: [map]
+    * @return: java.lang.String
+    * @Author: 忆地球往事
+    * @Date: 2020/4/24
+    */
     @GetMapping(value = "/tags")
     public String tag(ModelMap map){
-        map.addAttribute("tags",  tagService.findAll());
+        map.addAttribute("tags",  tagService.findAllBySort());
+        sidecar(map);
         return "tags";
     }
 

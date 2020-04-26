@@ -1,18 +1,21 @@
 package com.sylg.blog.service.documentation.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import com.sylg.blog.service.documentation.common.utils.DateUtils;
 import com.sylg.blog.service.documentation.domain.Announcement;
 import com.sylg.blog.service.documentation.mapper.AnnouncementMapper;
 import com.sylg.blog.service.documentation.service.AnnouncementService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
+/**
+ * announcement service impl
+ * @author 忆地球往事
+ */
 @Service
 @Slf4j
 public class AnnouncementServiceImpl implements AnnouncementService{
@@ -29,6 +32,7 @@ public class AnnouncementServiceImpl implements AnnouncementService{
     @Override
     public void insertAnnouncement(Announcement announcement) {
         try {
+            announcement.setAnnouncementTime(DateUtils.nowFormat());
             announcementMapper.insert(announcement);
         } catch (Exception e) {
             log.error("公告添加异常，异常信息：{}" ,e.getMessage());
@@ -42,6 +46,19 @@ public class AnnouncementServiceImpl implements AnnouncementService{
         }catch (Exception e){
             log.error("公告查询异常，异常信息：{}" ,e.getMessage());
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Announcement> findAll() {
+        return Optional.ofNullable(announcementMapper.selectAll()).orElse(new ArrayList<>());
+    }
+
+    @Override
+    public void deleteAnnouncement(Integer id) {
+        int i = announcementMapper.deleteById(id);
+        if(i > 0){
+            log.debug("删除公告{}",id);
         }
     }
 

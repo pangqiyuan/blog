@@ -5,6 +5,10 @@ import com.sylg.blog.service.documentation.domain.BlogUser;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * mail service
+ * @author 忆地球往事
+ */
 public interface MailService {
     /**
      * 发送文本邮件
